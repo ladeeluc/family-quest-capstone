@@ -15,7 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from website.base_views import FormView
+from website.views import homepage_view, logout_view, signup_view
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('',homepage_view,name='home'),
+    path('admin/', admin.site.urls,name='admin'),
+    path('form/', FormView.as_view(),name='form'),
+    path('logout/',logout_view,name='logout'),
+    path('signup',signup_view,name='signup'),
+
 ]
+

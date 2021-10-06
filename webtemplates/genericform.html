@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+         <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+   
+    </head><div>
+    <h1>Family Quest</h1>
+    <br>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" class="button" value="Submit!">
+</form>
+</div>
+</body></html>
