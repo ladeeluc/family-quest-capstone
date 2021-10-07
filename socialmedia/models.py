@@ -34,5 +34,10 @@ class Reaction(models.Model):
     def __int__(self):
         return self.post_reaction
 
+class CommentNotification(models.Model):
+    author_inform = models.ForeignKey('useraccount.UserAccount', related_name='person_inform', on_delete=models.CASCADE, null=True)
+    post_notify = models.ForeignKey('Post', related_name='post_notify', on_delete=models.CASCADE, null=True)
 
+def __str__(self):
+    return self.author_inform
 
