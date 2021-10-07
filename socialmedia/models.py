@@ -35,7 +35,7 @@ class Reaction(models.Model):
     )
 
 
-    post_reaction= models.ManyToManyField('Post', symmetrical=False, related_name='post_reaction', blank=True)
+    post_reaction= models.ForeignKey('Post', related_name='post_reaction', on_delete=models.CASCADE, blank=True)
 
     def __int__(self):
         return self.post_reaction
