@@ -7,5 +7,5 @@ from familystructure.models import (
 )
 
 admin.site.register(Person)
-admin.site.register(Relation)
+
 admin.site.register(FamilyCircle)
