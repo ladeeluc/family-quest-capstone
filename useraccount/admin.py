@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 class UserAccountAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        #(_('Linked Data'), {'fields': ('person',)}),
+        (_('Linked Data'), {'fields': ('person',)}),
         (_('Permissions'), {
             'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
         }),

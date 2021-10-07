@@ -12,10 +12,10 @@ from django.utils.translation import ugettext_lazy as _
 
 class UserAccount(AbstractBaseUser, PermissionsMixin):
     """
-    | Field    | Details   |
-    | :------- | :-------- |
-    | email    | unique    |
-    | password | 128 chars |
+    | Field    | Details    |
+    | :------- | :--------- |
+    | email    | unique     |
+    | password | 128 chars  |
     | person   | oto Person | # TODO: ADD THIS
     """
 
@@ -30,13 +30,13 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
         },
     )
 
-    # person = models.OneToOneField(
-    #     'familystructure.Person',
-    #     verbose_name=_('person'),
-    #     related_name='person',
-    #     null=True,
-    #     on_delete=models.DO_NOTHING,
-    # )
+    person = models.OneToOneField(
+        'familystructure.Person',
+        verbose_name=_('person'),
+        related_name='person',
+        null=True,
+        on_delete=models.DO_NOTHING,
+    )
 
     USERNAME_FIELD = 'email'
     EMAIL_FIELD = 'email'
