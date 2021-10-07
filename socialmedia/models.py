@@ -23,8 +23,16 @@ class Comment(models.Model):
     def __str__(self):
         return self.body
 
-# class Reaction(model.Models):
+class Reaction(models.Model):
+    post_reaction = models.ManyToManyField('Post', symmetrical=False,related_name= 'reactions',blank=True)
+    author= models.OneToOneField('useraccount.UserAccount', related_name='reaction', on_delete=models.CASCADE, null=True)
+    BOOL_CHOICES = ((True, 'Like'), (False, 'Dislike'))
+    post_is = models.BooleanField(choices=BOOL_CHOICES)
+    likes = models.IntegerField(default=0)
+    dislikes = models.IntegerField(default=0)
 
+    def __int__(self):
+        return self.post_reaction
 
 
 
