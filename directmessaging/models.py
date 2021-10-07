@@ -17,13 +17,18 @@ class Chat(models.Model):
     messages = models.ManyToManyField(
         'directmessaging.Message',
         verbose_name=_('messages'),
+        blank=True,
     )
+
+    def __str__(self):
+        return f"{' + '.join(str(u.person) for u in self.members.all())} ({len(self.messages.all())} messages)"
 
 class Message(models.Model):
     """
     | Field    | Details         |
     | :------- | :-------------- |
     | content  | Textfield       |
+    | sent_at  | DateTime        |
     | author   | fk Useraccount  |
     """
     content = models.TextField(
@@ -32,8 +37,16 @@ class Message(models.Model):
         blank=False,
     )
 
+    sent_at = models.DateTimeField(
+        _('sent_at'),
+        auto_now_add=True,
+    )
+
     author = models.ForeignKey(
         'useraccount.Useraccount',
         verbose_name=_('author'),
         on_delete=models.CASCADE,
     )
+
+    def __str__(self):
+        return f'[{self.sent_at.ctime()}] {self.author}: {self.content}'
