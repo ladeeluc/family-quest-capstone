@@ -1,7 +1,5 @@
 from django.db import models
-from django.db import models
-from django.contrib.auth.models import User
-from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 
 
 
@@ -16,28 +14,36 @@ class Post(models.Model):
 
 class Comment(models.Model):
     body = models.TextField(max_length=140)
-    date_time = models.DateTimeField(default=timezone.now)
-    author= models.OneToOneField('useraccount.UserAccount', related_name='comment', on_delete=models.CASCADE, null=True)
-    post_comment_added = models.ManyToManyField('Post', symmetrical=False,related_name= 'comments',blank=True)
+    date_time = models.DateTimeField(auto_now_add=True)
+    author= models.ForeignKey('useraccount.UserAccount', related_name='author', on_delete=models.CASCADE, null=True)
+    post_comment_added= models.ForeignKey('socialmedia.Post', related_name='post_comment_added',on_delete=models.CASCADE, blank=True)
 
     def __str__(self):
         return self.body
 
 class Reaction(models.Model):
-    post_reaction = models.ManyToManyField('Post', symmetrical=False,related_name= 'reactions',blank=True)
-    author= models.OneToOneField('useraccount.UserAccount', related_name='reaction', on_delete=models.CASCADE, null=True)
-    BOOL_CHOICES = ((True, 'Like'), (False, 'Dislike'))
-    post_is = models.BooleanField(choices=BOOL_CHOICES)
-    likes = models.IntegerField(default=0)
-    dislikes = models.IntegerField(default=0)
+    class ReactionType(models.TextChoices):
+            DEFAULT = '', _('Default'),
+            HEART = 'heart', _('Heart'),
+            SMILEY = 'smiley', _('Smiley'),
+            THUMBS_UP = 'thumbs_up', _('Thumbs_up')
+
+    reaction_type = models.CharField(
+        max_length=12,
+        choices=ReactionType.choices,
+        default=ReactionType.DEFAULT,
+    )
+
+
+    post_reaction= models.ManyToManyField('Post', symmetrical=False, related_name='post_reaction', blank=True)
 
     def __int__(self):
         return self.post_reaction
 
 class CommentNotification(models.Model):
-    author_inform = models.ForeignKey('useraccount.UserAccount', related_name='person_inform', on_delete=models.CASCADE, null=True)
-    post_notify = models.ForeignKey('Post', related_name='post_notify', on_delete=models.CASCADE, null=True)
+    author_inform= models.ForeignKey('useraccount.UserAccount', related_name='author_inform', on_delete=models.CASCADE)
+    post_notify= models.ForeignKey('socialmedia.Post', related_name='post_notify', on_delete=models.CASCADE)
 
-def __str__(self):
-    return self.author_inform
+    def __int__(self):
+        return self.author_inform
 
