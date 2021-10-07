@@ -6,7 +6,7 @@ class Chat(models.Model):
     """
     | Field    | Details         |
     | :------- | :-------------- |
-    | members  | mtm Useraccount |
+    | members  | mtm UserAccount |
     | messages | mtm Message    |
     """
     members = models.ManyToManyField(
@@ -29,7 +29,7 @@ class Message(models.Model):
     | :------- | :-------------- |
     | content  | Textfield       |
     | sent_at  | DateTime        |
-    | author   | fk Useraccount  |
+    | author   | fk UserAccount  |
     """
     content = models.TextField(
         _('content'),
@@ -43,7 +43,7 @@ class Message(models.Model):
     )
 
     author = models.ForeignKey(
-        'useraccount.Useraccount',
+        'useraccount.UserAccount',
         verbose_name=_('author'),
         on_delete=models.CASCADE,
     )
