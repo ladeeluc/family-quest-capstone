@@ -27,22 +27,26 @@ class Person(models.Model):
         _('first name'),
         max_length=32,
     )
+    
     nickname = models.CharField(
         _('nickname'),
         max_length=32,
         blank=True,
         null=True,
     )
+    
     middle_name = models.CharField(
         _('middle name'),
         max_length=32,
         blank=True,
         null=True,
     )
+    
     last_name = models.CharField(
         _('last name'),
         max_length=32,
     )
+    
     title = models.CharField(
         _('title'),
         max_length=16,
@@ -62,6 +66,7 @@ class Person(models.Model):
         auto_now=False,
         auto_now_add=False,
     )
+    
     death_date = models.DateField(
         _('birth date'),
         auto_now=False,
@@ -69,12 +74,12 @@ class Person(models.Model):
         blank=True,
         null=True,
     )
-
+    
     is_claimed = models.BooleanField(
         _('is claimed'),
         default=False,
     )
-
+    
     facts = ListAsStringField(default='[]', blank=True, null=True)
 
     def __str__(self):
