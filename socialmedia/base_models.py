@@ -3,39 +3,32 @@ from django.utils.translation import ugettext_lazy as _
 
 class BaseNotification(models.Model):
     """
-    To extend:
-    Assign a model string to `TARGET_MODEL`
-
-    Paste in:
+    To extend, add a target FK
     ```
-    target = models.ForeignKey(
-        TARGET_MODEL,
-        related_name='target',
+    target_? = models.ForeignKey(
+        'app.?',
+        related_name='?_notifications',
         on_delete=models.CASCADE,
     )
     ```
     """
-    TARGET_MODEL = None
-    target_author = models.ForeignKey(
+    target_user = models.ForeignKey(
         'useraccount.UserAccount',
-        related_name='target_author',
+        related_name='target_user',
         on_delete=models.CASCADE,
     )
 
     def __str__(self):
         t = self.TARGET_MODEL.split('.')[1]
-        return f'Notif for {self.target_author.person} about {t} {self.target}'
+        return f'Notif for {self.target_user.person} about {t} {self.target}'
 
 class BaseReaction(models.Model):
     """
-    To extend:
-    Assign a model string to `TARGET_MODEL`
-
-    Paste in:
+    To extend, add a target FK
     ```
-    target = models.ForeignKey(
-        TARGET_MODEL,
-        related_name='target',
+    target_? = models.ForeignKey(
+        'app.?',
+        related_name='?_reactions',
         on_delete=models.CASCADE,
     )
     ```
