@@ -15,19 +15,15 @@ class ChatEndpoint(BaseEndpoint):
         """Get all messages in this chat"""
         try:
             return self.ok({
-                'messages': [
-                {
+                'messages': [{
                     'content': message.content,
                     'sent_at': message.sent_at,
                     'author': message.author,
-                    'reactions': [
-                        {
-                            'reaction_type': reaction.reaction_type,
-                            'reactor': reaction.reactor,
-                        } for reaction in message.reactions.all()
-                    ],
-                } for message in Chat.objects.get(id=chat_id).messages.all()
-            ],
+                    'reactions': [{
+                                'reaction_type': reaction.reaction_type,
+                                'reactor': reaction.reactor,
+                    } for reaction in message.reactions.all()],
+                } for message in Chat.objects.get(id=chat_id).messages.all()],
             })
         except Chat.DoesNotExist:
             return self.not_found()
