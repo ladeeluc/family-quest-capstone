@@ -116,6 +116,12 @@ class MessageReaction(BaseReaction):
         on_delete=models.CASCADE,
     )
 
+    def json_serialize(self):
+        return {
+            'reaction_type': self.reaction_type,
+            'reactor': self.reactor.json_serialize(),
+        }
+
 class CommentNotification(BaseNotification):
     """
     | Field          | Details         |
@@ -156,6 +162,14 @@ class Chat(models.Model):
 
     def __str__(self):
         return f"{' + '.join(str(u.person) for u in self.members.all())} ({len(self.messages.all())} messages)"
+    
+    def json_serialize(self):
+        return {
+            'messages': [
+                message.json_serialize()
+                for message in self.messages.all()
+            ],
+        }
 
 class Message(models.Model):
     """
@@ -192,3 +206,11 @@ class Message(models.Model):
 
     def __str__(self):
         return f'[{self.sent_at.ctime()}] {self.author}: {self.content}'
+    
+    def json_serialize(self):
+        return {
+            'content': self.content,
+            'sent_at': self.sent_at,
+            'author': self.author.json_serialize(),
+            'reactions': [reaction.json_serialize() for reaction in self.reactions.all()],
+        }

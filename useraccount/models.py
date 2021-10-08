@@ -73,3 +73,14 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     @classmethod
     def normalize_email(cls, email):
         return normalize('NFKC', email) if isinstance(email, str) else email
+    
+    def json_serialize(self):
+        if self.person:
+            return {
+                'email': self.email,
+                'name': str(self.person),
+                'tagline': self.person.tagline,
+            }
+        return {
+            'email': self.email,
+        }

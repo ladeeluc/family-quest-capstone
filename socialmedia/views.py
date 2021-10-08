@@ -14,17 +14,7 @@ class ChatEndpoint(BaseEndpoint):
     def get(self, request, chat_id):
         """Get all messages in this chat"""
         try:
-            return self.ok({
-                'messages': [{
-                    'content': message.content,
-                    'sent_at': message.sent_at,
-                    'author': message.author,
-                    'reactions': [{
-                                'reaction_type': reaction.reaction_type,
-                                'reactor': reaction.reactor,
-                    } for reaction in message.reactions.all()],
-                } for message in Chat.objects.get(id=chat_id).messages.all()],
-            })
+            return self.ok(Chat.objects.get(id=chat_id).json_serialize())
         except Chat.DoesNotExist:
             return self.not_found()
     
