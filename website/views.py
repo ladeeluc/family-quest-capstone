@@ -1,44 +1,49 @@
 from django.shortcuts import render, HttpResponseRedirect, reverse, redirect
 from django.contrib.auth import login, logout, authenticate
-from useraccount.forms import LoginForm, SignUpForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+from useraccount.forms import LoginForm, SignupForm
 from useraccount.models import UserAccount
 
+from django.views.generic import View
+from website.base_views import GenericFormView
 
-# Create your views here.
-def homepage_view(request):
-    
-    return render(request,'index.html')
 
-def signup_view(request):
-    if request.method == 'POST': # if the form has been submitted
-        form = SignUpForm(request.POST) #get the data
-        if form.is_valid():
-            UserAccount.objects.create_user( #create_user handles password encryption
-                email = form.cleaned_data.get('email'),
-                password = form.cleaned_data.get('password'),
-                )
-            user= authenticate(
-                request,email=form.cleaned_data.get('email'),password=form.cleaned_data.get('password'))
-            if user:
-                login(request,user)
-                return HttpResponseRedirect(reverse('home'))
-            
-    else:
-        form = SignUpForm()
-    return render(request, 'signup.html', {'form': form})
 
-def logout_view(request):
-    logout(request)
-    return redirect('home')
+class Home(LoginRequiredMixin, View):
 
-def login_view(request):
-    if request.method == 'POST':
-        form= LoginForm(request.POST)
-        if form.is_valid():
-            data=form.cleaned_data
-            user= authenticate(request,email=data.get('email'),password=data.get('password'))
-            if user:
-                login(request,user)
-                return redirect('home')
-    form=LoginForm()
-    return render(request,'genericform.html',{'form':form})
+    def get(self, request):
+        return render(request, 'index.html')
+
+class Logout(View):
+
+    def get(self, request):
+        logout(request)
+        return redirect('home')
+
+class Login(GenericFormView):
+    FormClass = LoginForm
+    template_text = {"header":"Log In to Family Quest", "submit":"Log In"}
+
+    def _handle_submission(self, request, data):
+        user = authenticate(request, email=data.get('email'), password=data.get('password'))
+        if user:
+            login(request, user)
+            return redirect('home')
+
+class Signup(GenericFormView):
+    FormClass = SignupForm
+    template_text = {"header":"Sign Up to Family Quest", "submit":"Get Started"}
+
+    def _handle_submission(self, request, data):
+        UserAccount.objects.create_user(
+            email=form.cleaned_data.get('email'),
+            password=form.cleaned_data.get('password'),
+        )
+        user = authenticate(request,
+            email=form.cleaned_data.get('email'),
+            password=form.cleaned_data.get('password')
+        )
+        if user:
+            login(request,user)
+            return redirect('home')

@@ -6,7 +6,7 @@ class LoginForm(forms.Form):
     # this widget/plugin '.PasswordInput' hides the chars with '****'
     password = forms.CharField(widget=forms.PasswordInput)
 
-class SignUpForm(forms.Form):
+class SignupForm(forms.Form):
     email = forms.CharField(max_length=50)
     # this widget/plugin '.PasswordInput' hides the chars with '****'
     password = forms.CharField(widget=forms.PasswordInput)
