@@ -25,13 +25,13 @@ class Comment(models.Model):
     date_time = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(
         'useraccount.UserAccount',
-        related_name='author',
+        related_name='comments_made',
         on_delete=models.CASCADE,
         null=True,
     )
     commented_on = models.ForeignKey(
         'socialmedia.Post',
-        related_name='commented_on',
+        related_name='comments',
         on_delete=models.CASCADE,
         blank=True,
     )
@@ -43,7 +43,7 @@ class PostReaction(BaseReaction):
     TARGET_MODEL = 'socialmedia.Post'
     target_post = models.ForeignKey(
         TARGET_MODEL,
-        related_name='post_reaction',
+        related_name='post_reactions',
         on_delete=models.CASCADE,
     )
 
@@ -51,7 +51,7 @@ class CommentReaction(BaseReaction):
     TARGET_MODEL = 'socialmedia.Comment'
     target = models.ForeignKey(
         TARGET_MODEL,
-        related_name='comment_reaction',
+        related_name='comment_reactions',
         on_delete=models.CASCADE,
     )
 
@@ -59,6 +59,6 @@ class CommentNotification(BaseNotification):
     TARGET_MODEL = 'socialmedia.Comment'
     target = models.ForeignKey(
         TARGET_MODEL,
-        related_name='comment_notification',
+        related_name='comment_notifications',
         on_delete=models.CASCADE,
     )
