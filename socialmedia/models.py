@@ -123,7 +123,7 @@ class CommentNotification(BaseNotification):
     | target_user    | fk UserAccount  |
     | target_comment | fk Comment      |
     """
-    target = models.ForeignKey(
+    target_comment = models.ForeignKey(
         'socialmedia.Comment',
         related_name='comment_notifications',
         on_delete=models.CASCADE,
@@ -154,13 +154,6 @@ class Chat(models.Model):
         verbose_name=_('members'),
     )
 
-    messages = models.ManyToManyField(
-        'socialmedia.Message',
-        verbose_name=_('messages'),
-        related_name='chat',
-        blank=True,
-    )
-
     def __str__(self):
         return f"{' + '.join(str(u.person) for u in self.members.all())} ({len(self.messages.all())} messages)"
 
@@ -187,6 +180,13 @@ class Message(models.Model):
         'useraccount.UserAccount',
         verbose_name=_('author'),
         related_name='messages_made',
+        on_delete=models.CASCADE,
+    )
+
+    chat = models.ForeignKey(
+        'socialmedia.Chat',
+        verbose_name=_('chat'),
+        related_name='messages',
         on_delete=models.CASCADE,
     )
 
