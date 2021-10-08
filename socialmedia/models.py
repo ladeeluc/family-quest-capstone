@@ -1,10 +1,21 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from socialmedia.base_models import BaseReaction, BaseNotification
 
 class Post(models.Model):
     title = models.CharField(max_length=50)
     content = models.TextField()
     pub_date = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(
+        'useraccount.UserAccount',
+        verbose_name=_('author'),
+        on_delete=models.CASCADE,
+    )
+    family_circle = models.ForeignKey(
+        'familystructure.FamilyCircle',
+        verbose_name=_('family circle'),
+        on_delete=models.CASCADE,
+    )
     
     def __str__(self):
         return self.title
@@ -12,34 +23,42 @@ class Post(models.Model):
 class Comment(models.Model):
     body = models.TextField(max_length=140)
     date_time = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey('useraccount.UserAccount', related_name='author', on_delete=models.CASCADE, null=True)
-    post_comment_added = models.ForeignKey('socialmedia.Post', related_name='post_comment_added', on_delete=models.CASCADE, blank=True)
+    author = models.ForeignKey(
+        'useraccount.UserAccount',
+        related_name='author',
+        on_delete=models.CASCADE,
+        null=True,
+    )
+    commented_on = models.ForeignKey(
+        'socialmedia.Post',
+        related_name='commented_on',
+        on_delete=models.CASCADE,
+        blank=True,
+    )
 
     def __str__(self):
         return self.body
 
-class Reaction(models.Model):
-    class ReactionType(models.TextChoices):
-            HEART = 'heart', _('Heart'),
-            SMILEY = 'smiley', _('Smiley'),
-            THUMBS_UP = 'thumbs_up', _('Thumbs_up')
-
-    reaction_type = models.CharField(
-        max_length=12,
-        choices=ReactionType.choices,
-        default=ReactionType.DEFAULT,
+class PostReaction(BaseReaction):
+    TARGET_MODEL = 'socialmedia.Post'
+    target_post = models.ForeignKey(
+        TARGET_MODEL,
+        related_name='post_reaction',
+        on_delete=models.CASCADE,
     )
 
+class CommentReaction(BaseReaction):
+    TARGET_MODEL = 'socialmedia.Comment'
+    target = models.ForeignKey(
+        TARGET_MODEL,
+        related_name='comment_reaction',
+        on_delete=models.CASCADE,
+    )
 
-    post_reaction = models.ForeignKey('Post', related_name='post_reaction', on_delete=models.CASCADE, blank=True)
-
-    def __int__(self):
-        return self.post_reaction
-
-class CommentNotification(models.Model):
-    author_inform = models.ForeignKey('useraccount.UserAccount', related_name='author_inform', on_delete=models.CASCADE)
-    post_notify = models.ForeignKey('socialmedia.Post', related_name='post_notify', on_delete=models.CASCADE)
-
-    def __int__(self):
-        return self.author_inform
-
+class CommentNotification(BaseNotification):
+    TARGET_MODEL = 'socialmedia.Comment'
+    target = models.ForeignKey(
+        TARGET_MODEL,
+        related_name='comment_notification',
+        on_delete=models.CASCADE,
+    )
