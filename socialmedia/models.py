@@ -188,5 +188,4 @@ class Message(models.Model):
             'content': self.content,
             'sent_at': self.sent_at,
             'author': self.author.json_serialize(),
-            'reactions': [reaction.json_serialize() for reaction in self.reactions.all()],
         }
