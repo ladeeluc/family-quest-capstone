@@ -36,7 +36,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'mptt',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,7 +45,8 @@ INSTALLED_APPS = [
     'website',
     'useraccount',
     'familystructure',
-    'socialmedia'
+    'directmessaging',
+    'socialmedia',
 ]
 
 MIDDLEWARE = [
