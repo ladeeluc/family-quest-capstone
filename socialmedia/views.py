@@ -2,7 +2,6 @@ from website.base_views import BaseEndpoint
 from socialmedia.models import (
     Chat,
     Message,
-    MessageReaction,
     MessageNotification,
 )
 
@@ -60,4 +59,3 @@ class ChatEndpoint(BaseEndpoint):
             return self.done()
         except Chat.DoesNotExist:
             return self.not_found()
-        
