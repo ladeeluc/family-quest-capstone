@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'website',
     'useraccount',
     'familystructure',
-    'directmessaging',
     'socialmedia',
 ]
 
