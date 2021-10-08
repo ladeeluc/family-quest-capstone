@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'useraccount',
     'familystructure',
     'directmessaging',
+    'socialmedia',
 ]
 
 MIDDLEWARE = [
