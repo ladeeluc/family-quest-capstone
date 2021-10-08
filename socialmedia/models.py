@@ -97,31 +97,6 @@ class CommentReaction(BaseReaction):
         on_delete=models.CASCADE,
     )
 
-class MessageReaction(BaseReaction):
-    """
-    | Field            | Details              |
-    | :--------------- | :------------------- |
-    | reaction_type    | Comment.ReactionType |
-    | reactor          | fk UserAccount       |
-    | target_message   | fk Message           |
-
-    `ReactionType`:
-    `HEART`
-    `SMILEY`
-    `THUMBS_UP`
-    """
-    target_message = models.ForeignKey(
-        'socialmedia.Message',
-        related_name='message_reactions',
-        on_delete=models.CASCADE,
-    )
-
-    def json_serialize(self):
-        return {
-            'reaction_type': self.reaction_type,
-            'reactor': self.reactor.json_serialize(),
-        }
-
 class CommentNotification(BaseNotification):
     """
     | Field          | Details         |
@@ -209,6 +184,7 @@ class Message(models.Model):
     
     def json_serialize(self):
         return {
+            'message_id': self.id,
             'content': self.content,
             'sent_at': self.sent_at,
             'author': self.author.json_serialize(),

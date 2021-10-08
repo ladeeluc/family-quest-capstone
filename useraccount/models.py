@@ -77,10 +77,13 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     def json_serialize(self):
         if self.person:
             return {
+                'account_id': self.id,
+                'person_id': self.person.id,
                 'email': self.email,
                 'name': str(self.person),
                 'tagline': self.person.tagline,
             }
         return {
+            'account_id': self.id,
             'email': self.email,
         }
