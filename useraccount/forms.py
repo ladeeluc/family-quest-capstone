@@ -1,13 +1,14 @@
 from django import forms
-from useraccount.models import UserAccount
 
-class LoginForm(forms.ModelForm):
-    class Meta:
-        model = UserAccount
-        fields = ['email', 'password']
+
+class LoginForm(forms.Form):
+    email = forms.CharField(max_length=50)
+    # this widget/plugin '.PasswordInput' hides the chars with '****'
+    password = forms.CharField(widget=forms.PasswordInput)
 
 class SignupForm(forms.Form):
-    email = forms.CharField(max_length=254, label='Email address')
+    email = forms.CharField(max_length=50)
+    # this widget/plugin '.PasswordInput' hides the chars with '****'
     password = forms.CharField(widget=forms.PasswordInput)
     confirm_password = forms.CharField(widget=forms.PasswordInput)
     def clean(self):
