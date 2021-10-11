@@ -62,7 +62,8 @@ class NotifsEndpoint(BaseEndpoint):
             'notifs': sorted(
                 [ m.json_serialize() for m in messages ]
                 + [ c.json_serialize() for c in comments ],
-                key=lambda n: n['created_at']
+                key=lambda n: n['created_at'],
+                reverse=True,
             )
         })
     
@@ -99,7 +100,8 @@ class NotifsDetailEndpoint(BaseEndpoint):
                 'notifs': sorted(
                     [ m.json_serialize() for m in messages ]
                     + [ c.json_serialize() for c in comments ],
-                    key=lambda n: n['created_at']
+                    key=lambda n: n['created_at'],
+                    reverse=True,
                 )
             })
         except MessageNotification.DoesNotExist:
