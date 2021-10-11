@@ -25,8 +25,8 @@ class Login(GenericFormView):
     FormClass = LoginForm
     template_text = {"header":"Log In to Family Quest", "submit":"Log In"}
 
-    def _handle_submission(self, request, data):
-        user = authenticate(request, email=data.get('email'), password=data.get('password'))
+    def _handle_submission(self, request, form):
+        user = authenticate(request, email=form.get('email'), password=form.get('password'))
         if user:
             login(request, user)
             return redirect('home')
@@ -35,14 +35,14 @@ class Signup(GenericFormView):
     FormClass = SignupForm
     template_text = {"header":"Sign Up to Family Quest", "submit":"Get Started"}
 
-    def _handle_submission(self, request, data):
+    def _handle_submission(self, request, form):
         UserAccount.objects.create_user(
-            email=form.cleaned_data.get('email'),
-            password=form.cleaned_data.get('password'),
+            email=form.get('email'),
+            password=form.get('password'),
         )
         user = authenticate(request,
-            email=form.cleaned_data.get('email'),
-            password=form.cleaned_data.get('password')
+            email=form.get('email'),
+            password=form.get('password')
         )
         if user:
             login(request,user)

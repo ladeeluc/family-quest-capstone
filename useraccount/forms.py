@@ -13,5 +13,6 @@ class SignupForm(forms.Form):
     confirm_password = forms.CharField(widget=forms.PasswordInput)
     def clean(self):
         if self.cleaned_data['password'] != self.cleaned_data['confirm_password']:
-            self.add_error('password','Password DOES NOT match. Try again')
+            self.add_error('password','')
+            self.add_error('confirm_password','Passwords do not match. Please try again.')
         return self.cleaned_data

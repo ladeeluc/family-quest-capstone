@@ -38,6 +38,6 @@ class GenericFormView(View):
                 return res
         return render(request, self.template_name, {"form": form, "template_text": self.template_text})
 
-    def _handle_submission(self, request, data):
+    def _handle_submission(self, request, form):
         return NotImplemented
 

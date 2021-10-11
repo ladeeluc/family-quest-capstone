@@ -1,2 +1,10 @@
-<a href="{% url 'home' %}">Home</a>
-Welcome {{user.email}} !
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="container-fluid">
+    <h1>Welcome!</h1>
+    <p>
+        (Signed in as {{user.email}})
+    </p>
+</div>
+{% endblock %}
