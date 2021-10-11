@@ -116,7 +116,9 @@ class CommentNotification(BaseNotification):
 
     def json_serialize(self):
         return {
-            'notif_slug': f'comment-{self.id}',
+            'slug': f'comment-{self.id}',
+            'type': 'comment',
+            'from': str(self.target_comment.author),
             'created_at': self.created_at,
             'url': f"reverse('comment detail view name or post detail view name with hash, fixme when one exists', {self.target_comment.id})",
         }
@@ -137,7 +139,9 @@ class MessageNotification(BaseNotification):
 
     def json_serialize(self):
         return {
-            'notif_slug': f'message-{self.id}',
+            'slug': f'message-{self.id}',
+            'type': 'message',
+            'from': str(self.target_message.author),
             'created_at': self.created_at,
             'url': f"reverse('chat detail view name, fixme when one exists', {self.target_message.chat.id})",
         }
