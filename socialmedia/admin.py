@@ -7,7 +7,6 @@ from socialmedia.models import (
     CommentNotification,
     Chat,
     Message,
-    MessageReaction,
     MessageNotification,
 )
 
@@ -18,6 +17,5 @@ admin.site.register(CommentReaction)
 admin.site.register(CommentNotification)
 admin.site.register(Chat)
 admin.site.register(Message)
-admin.site.register(MessageReaction)
 admin.site.register(MessageNotification)
 

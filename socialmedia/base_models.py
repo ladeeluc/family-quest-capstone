@@ -3,10 +3,11 @@ from django.utils.translation import ugettext_lazy as _
 
 class BaseNotification(models.Model):
     """
-    To extend, add a target FK
+    To extend, add a TARGET_MODEL and target FK field
     ```
+    TARGET_MODEL = 'app.?'
     target_? = models.ForeignKey(
-        'app.?',
+        TARGET_MODEL,
         related_name='?_notifications',
         on_delete=models.CASCADE,
     )
@@ -20,14 +21,15 @@ class BaseNotification(models.Model):
 
     def __str__(self):
         t = self.TARGET_MODEL.split('.')[1]
-        return f'Notif for {self.target_user.person} about {t} {self.target}'
+        return f'Notif for {self.target_user.person} about a {t}'
 
 class BaseReaction(models.Model):
     """
-    To extend, add a target FK
+    To extend, add a TARGET_MODEL and target FK field
     ```
+    TARGET_MODEL = 'app.?'
     target_? = models.ForeignKey(
-        'app.?',
+        TARGET_MODEL,
         related_name='?_reactions',
         on_delete=models.CASCADE,
     )

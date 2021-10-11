@@ -17,12 +17,21 @@ from django.contrib import admin
 from django.urls import path
 from website import views as frontend
 
+from socialmedia.views import (
+    ChatEndpoint,
+)
+
 urlpatterns = [
+    path('admin/', admin.site.urls),
+
+    # Endpoints
+    path('chat/<int:chat_id>/', ChatEndpoint.as_view()),
+    
+    # Views
     path('',frontend.Home.as_view(),name='home'),
     path('admin/', admin.site.urls,name='admin'),
     path('logout/',frontend.Logout.as_view(),name='logout'),
     path('signup/',frontend.Signup.as_view(),name='signup'),
     path('login/',frontend.Login.as_view(),name='login'),
-
 ]
 

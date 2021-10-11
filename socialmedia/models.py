@@ -72,8 +72,9 @@ class PostReaction(BaseReaction):
     `SMILEY`
     `THUMBS_UP`
     """
+    TARGET_MODEL = 'socialmedia.Post'
     target_post = models.ForeignKey(
-        'socialmedia.Post',
+        TARGET_MODEL,
         related_name='post_reactions',
         on_delete=models.CASCADE,
     )
@@ -91,28 +92,10 @@ class CommentReaction(BaseReaction):
     `SMILEY`
     `THUMBS_UP`
     """
+    TARGET_MODEL = 'socialmedia.Comment'
     target_comment = models.ForeignKey(
-        'socialmedia.Comment',
+        TARGET_MODEL,
         related_name='comment_reactions',
-        on_delete=models.CASCADE,
-    )
-
-class MessageReaction(BaseReaction):
-    """
-    | Field            | Details              |
-    | :--------------- | :------------------- |
-    | reaction_type    | Comment.ReactionType |
-    | reactor          | fk UserAccount       |
-    | target_message   | fk Message           |
-
-    `ReactionType`:
-    `HEART`
-    `SMILEY`
-    `THUMBS_UP`
-    """
-    target_message = models.ForeignKey(
-        'socialmedia.Message',
-        related_name='message_reactions',
         on_delete=models.CASCADE,
     )
 
@@ -123,8 +106,9 @@ class CommentNotification(BaseNotification):
     | target_user    | fk UserAccount  |
     | target_comment | fk Comment      |
     """
+    TARGET_MODEL = 'socialmedia.Comment'
     target_comment = models.ForeignKey(
-        'socialmedia.Comment',
+        TARGET_MODEL,
         related_name='comment_notifications',
         on_delete=models.CASCADE,
     )
@@ -136,8 +120,9 @@ class MessageNotification(BaseNotification):
     | target_user    | fk UserAccount  |
     | target_message | fk Message      |
     """
+    TARGET_MODEL = 'socialmedia.Message'
     target_message = models.ForeignKey(
-        'socialmedia.Message',
+        TARGET_MODEL,
         related_name='message_notifications',
         on_delete=models.CASCADE,
     )
@@ -155,7 +140,15 @@ class Chat(models.Model):
     )
 
     def __str__(self):
-        return f"{' + '.join(str(u.person) for u in self.members.all())} ({len(self.messages.all())} messages)"
+        return f"{' + '.join(str(u) for u in self.members.all())} ({len(self.messages.all())} messages)"
+    
+    def json_serialize(self):
+        return {
+            'messages': [
+                message.json_serialize()
+                for message in self.messages.all()
+            ],
+        }
 
 class Message(models.Model):
     """
@@ -192,3 +185,11 @@ class Message(models.Model):
 
     def __str__(self):
         return f'[{self.sent_at.ctime()}] {self.author}: {self.content}'
+    
+    def json_serialize(self):
+        return {
+            'message_id': self.id,
+            'content': self.content,
+            'sent_at': self.sent_at,
+            'author': self.author.json_serialize(),
+        }
