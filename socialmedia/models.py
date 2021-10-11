@@ -72,8 +72,9 @@ class PostReaction(BaseReaction):
     `SMILEY`
     `THUMBS_UP`
     """
+    TARGET_MODEL = 'socialmedia.Post'
     target_post = models.ForeignKey(
-        'socialmedia.Post',
+        TARGET_MODEL,
         related_name='post_reactions',
         on_delete=models.CASCADE,
     )
@@ -91,8 +92,9 @@ class CommentReaction(BaseReaction):
     `SMILEY`
     `THUMBS_UP`
     """
+    TARGET_MODEL = 'socialmedia.Comment'
     target_comment = models.ForeignKey(
-        'socialmedia.Comment',
+        TARGET_MODEL,
         related_name='comment_reactions',
         on_delete=models.CASCADE,
     )
@@ -104,8 +106,9 @@ class CommentNotification(BaseNotification):
     | target_user    | fk UserAccount  |
     | target_comment | fk Comment      |
     """
+    TARGET_MODEL = 'socialmedia.Comment'
     target_comment = models.ForeignKey(
-        'socialmedia.Comment',
+        TARGET_MODEL,
         related_name='comment_notifications',
         on_delete=models.CASCADE,
     )
@@ -117,8 +120,9 @@ class MessageNotification(BaseNotification):
     | target_user    | fk UserAccount  |
     | target_message | fk Message      |
     """
+    TARGET_MODEL = 'socialmedia.Message'
     target_message = models.ForeignKey(
-        'socialmedia.Message',
+        TARGET_MODEL,
         related_name='message_notifications',
         on_delete=models.CASCADE,
     )
