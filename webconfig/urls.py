@@ -16,6 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from socialmedia.views import (
+    ChatEndpoint,
+)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    # Endpoints
+    path('chat/<int:chat_id>/', ChatEndpoint.as_view()),
 ]

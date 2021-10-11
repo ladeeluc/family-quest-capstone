@@ -136,7 +136,7 @@ class Chat(models.Model):
     )
 
     def __str__(self):
-        return f"{' + '.join(str(u.person) for u in self.members.all())} ({len(self.messages.all())} messages)"
+        return f"{' + '.join(str(u) for u in self.members.all())} ({len(self.messages.all())} messages)"
     
     def json_serialize(self):
         return {

@@ -68,7 +68,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
     def __str__(self):
-        return self.email
+        return str(self.person) if self.person else self.email
     
     @classmethod
     def normalize_email(cls, email):
