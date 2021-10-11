@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from website import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-]
+    path('user/<int:user_id>/', views.UserProfileView.as_view(), name="user_detail"),
+]+ static(settings.MEDIA_URL, document_root=settings)
