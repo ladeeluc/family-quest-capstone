@@ -20,13 +20,15 @@ from memberProfile.views import add_member,member_detail
 
 from socialmedia.views import (
     ChatEndpoint,
+    NotifsEndpoint,
+    NotifsDetailEndpoint,
 )
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-
     # Endpoints
-    path('chat/<int:chat_id>/', ChatEndpoint.as_view()),
+    path('api/chat/<int:chat_id>/', ChatEndpoint.as_view()),
+    path('api/notifs/', NotifsEndpoint.as_view()),
+    path('api/notifs/<slug:notif_slug>/', NotifsDetailEndpoint.as_view()),
     
     # Views
     path('',frontend.Home.as_view(),name='home'),

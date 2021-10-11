@@ -1,5 +1,6 @@
 from django.db import models
 from socialmedia.base_models import BaseReaction, BaseNotification
+from django.urls import reverse
 
 from django.utils.translation import ugettext_lazy as _
 
@@ -113,6 +114,13 @@ class CommentNotification(BaseNotification):
         on_delete=models.CASCADE,
     )
 
+    def json_serialize(self):
+        return {
+            'notif_slug': f'comment-{self.id}',
+            'created_at': self.created_at,
+            'url': f"reverse('comment detail view name or post detail view name with hash, fixme when one exists', {self.target_comment.id})",
+        }
+
 class MessageNotification(BaseNotification):
     """
     | Field          | Details         |
@@ -126,6 +134,13 @@ class MessageNotification(BaseNotification):
         related_name='message_notifications',
         on_delete=models.CASCADE,
     )
+
+    def json_serialize(self):
+        return {
+            'notif_slug': f'message-{self.id}',
+            'created_at': self.created_at,
+            'url': f"reverse('chat detail view name, fixme when one exists', {self.target_message.chat.id})",
+        }
 
 class Chat(models.Model):
     """
