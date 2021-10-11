@@ -8,6 +8,7 @@ authors = ["Gavin Ferise <gmferise@gmail.com>"]
 python = "^3.9"
 Django = "^3.2.7"
 django-environ = "^0.7.0"
+django-bootstrap5 = "^2.1.2"
 
 [tool.poetry.dev-dependencies]
 
