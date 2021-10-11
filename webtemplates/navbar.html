@@ -5,7 +5,7 @@
 {% url 'signup' as signup %}
 <nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
     <a class="navbar-brand" href="{{home}}">Family Quest</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -22,7 +22,7 @@
               </li>
             {% endif %}
         </ul>
-        <div>
+        <div class="mt-2 mt-lg-0">
             {% if user.is_authenticated %}
                 <button type="button" class="btn btn-outline-secondary position-relative me-3">
                     Notifications
