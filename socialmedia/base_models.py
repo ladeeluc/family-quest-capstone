@@ -19,9 +19,14 @@ class BaseNotification(models.Model):
         on_delete=models.CASCADE,
     )
 
+    created_at = models.DateTimeField(
+        _('created_at'),
+        auto_now_add=True,
+    )
+
     def __str__(self):
         t = self.TARGET_MODEL.split('.')[1]
-        return f'Notif for {self.target_user.person} about a {t}'
+        return f'Notif for {self.target_user} about a {t}'
 
 class BaseReaction(models.Model):
     """
