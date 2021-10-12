@@ -8,16 +8,16 @@ class BaseNotification(models.Model):
     TARGET_MODEL = 'app.?'
     target_? = models.ForeignKey(
         TARGET_MODEL,
-        related_name='?_notifications',
+        related_name='notifications_created',
+        on_delete=models.CASCADE,
+    )
+    target_user = models.ForeignKey(
+        'useraccount.UserAccount',
+        related_name='???',
         on_delete=models.CASCADE,
     )
     ```
     """
-    target_user = models.ForeignKey(
-        'useraccount.UserAccount',
-        related_name='target_user',
-        on_delete=models.CASCADE,
-    )
 
     created_at = models.DateTimeField(
         _('created_at'),
