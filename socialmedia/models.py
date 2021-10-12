@@ -151,7 +151,6 @@ class Chat(models.Model):
     | Field    | Details         |
     | :------- | :-------------- |
     | members  | mtm UserAccount |
-    | messages | mtm Message     |
     """
     members = models.ManyToManyField(
         'useraccount.UserAccount',
@@ -176,6 +175,7 @@ class Message(models.Model):
     | content  | Textfield       |
     | sent_at  | DateTime        |
     | author   | fk UserAccount  |
+    | chat     | fk Chat         |
     """
     content = models.TextField(
         _('content'),

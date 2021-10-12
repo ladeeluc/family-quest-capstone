@@ -33,7 +33,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     person = models.OneToOneField(
         'familystructure.Person',
         verbose_name=_('person'),
-        related_name='person',
+        related_name='useraccount',
         null=True,
         on_delete=models.DO_NOTHING,
     )
