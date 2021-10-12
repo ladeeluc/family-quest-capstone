@@ -275,11 +275,13 @@ class Command(BaseCommand):
                         reactor=staff[0],
                         target_post=post,
                     )
-                    PostReaction.objects.create(
-                        reaction_type=PostReaction.ReactionType.SMILEY,
-                        reactor=random.choice(members).useraccount,
-                        target_post=post,
-                    )
+                    reactors = random.choices(list(doe_family.members.filter(is_claimed=True)), k=random.randint(0,10))
+                    for reactor in reactors:
+                        PostReaction.objects.create(
+                            reaction_type=random.choice(PostReaction.ReactionType.values),
+                            reactor=reactor.useraccount,
+                            target_post=post,
+                        )
                     comment = Comment.objects.create(
                         body='Hi! I manage this family circle. Let me know if you need anything.',
                         author=staff[0],
@@ -319,11 +321,13 @@ class Command(BaseCommand):
                         reactor=staff[0],
                         target_post=post,
                     )
-                    PostReaction.objects.create(
-                        reaction_type=PostReaction.ReactionType.SMILEY,
-                        reactor=random.choice(members).useraccount,
-                        target_post=post,
-                    )
+                    reactors = random.choices(list(buck_family.members.filter(is_claimed=True)), k=random.randint(0,10))
+                    for reactor in reactors:
+                        PostReaction.objects.create(
+                            reaction_type=random.choice(PostReaction.ReactionType.choices),
+                            reactor=reactor.useraccount,
+                            target_post=post,
+                        )
                     comment = Comment.objects.create(
                         body='Hi! I manage this family circle. Let me know if you need anything.',
                         author=staff[0],
@@ -346,9 +350,11 @@ class Command(BaseCommand):
             except Person.useraccount.RelatedObjectDoesNotExist:
                     pass
         
-        # Spam some DMs
+        
         anyone = UserAccount.objects.all()
-        text_chars = 'abcdefghijklmnopqrstuvwxyz    '
+        text_chars = 'abcdefghijklmnopqrstuvwxyz            '
+
+        # Spam some DMs
         for _ in range(15):
             acc1 = random.choice(anyone)
             acc2 = random.choice(anyone)
@@ -357,10 +363,39 @@ class Command(BaseCommand):
                 chat.members.add(acc1)
                 chat.members.add(acc2)
                 for _ in range(20):
-                    Message.objects.create(
+                    author = random.choice([acc1, acc2])
+                    if author == acc1:
+                        recipient = acc2
+                    else:
+                        recipient = acc1
+                    message = Message.objects.create(
                         content=''.join(random.choices(text_chars, k=random.choice(range(1,100)))),
                         chat=chat,
-                        author=random.choice([acc1, acc2]),
+                        author=author,
                     )
+                    MessageNotification.objects.create(
+                        target_user=recipient,
+                        target_message=message,
+                    )
+        
+        # Spam some comments
+        for _ in range(20):
+            author = random.choice(anyone)
+            family_circle = random.choice(author.person.family_circles.all())
+            posts = Post.objects.filter(family_circle=family_circle)
+            post = random.choice(posts)
+            comment = Comment.objects.create(
+                body=''.join(random.choices(text_chars, k=random.choice(range(1,100)))),
+                author=author,
+                commented_on=post,
+            )
 
+            reactors = random.choices(family_circle.members.filter(is_claimed=True), k=random.randint(0,10))
+            for reactor in reactors:
+                CommentReaction.objects.create(
+                    reaction_type=random.choice(CommentReaction.ReactionType.values),
+                    reactor=reactor.useraccount,
+                    target_comment=comment,
+                )
+                    
         self.stdout.write(self.style.SUCCESS('Successfully seeded the database'))

@@ -102,13 +102,13 @@ class Relation(models.Model):
     source = models.ForeignKey(
         'familystructure.Person',
         verbose_name=_('source person'),
-        related_name='source',
+        related_name='relations_out',
         on_delete=models.CASCADE,
     )
     target = models.ForeignKey(
         'familystructure.Person',
         verbose_name=_('target person'),
-        related_name='target',
+        related_name='relations_in',
         on_delete=models.CASCADE,
     )
     is_upward = models.BooleanField(
@@ -133,12 +133,12 @@ class FamilyCircle(models.Model):
     members = models.ManyToManyField(
         'familystructure.Person',
         verbose_name=_('members'),
-        related_name='members',
+        related_name='family_circles',
     )
     managers = models.ManyToManyField(
         'useraccount.UserAccount',
         verbose_name=_('managers'),
-        related_name='managers',
+        related_name='family_circles_managing',
     )
 
     def __str__(self):
