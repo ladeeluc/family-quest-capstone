@@ -13,21 +13,21 @@
         <ul class="navbar-nav me-auto">
             {% if user.is_authenticated %}
             <li class="nav-item">
-              <a class="nav-link" href="{{profile}}">Profile</a>
+                <a class="nav-link" href="{{profile}}">Profile</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{social_circles}}">Social Circles</a>
-              </li>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{family_tree}}">Family Tree</a>
-              </li>
+            </li>
             {% endif %}
         </ul>
         <div class="mt-2 mt-lg-0">
             {% if user.is_authenticated %}
                 <button type="button" class="btn btn-outline-secondary position-relative me-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
                     Notifications
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">({{user.notifications.count}})</span>
+                    <span id="nav-notifications-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-1"></span>
                 </button>
                 <a class="btn btn-outline-primary" href="{{logout}}">Log Out</a>
             {% else %}
@@ -41,9 +41,9 @@
   <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
     <div class="offcanvas-header">
       <h5 id="offcanvasRightLabel">
-          Notifications
-          <span class="notification-count badge rounded-pill bg-danger">0</span>
-          <button class="notification-clear-all btn btn-sm btn-outline-danger ms-1">Dismiss All</button>
+            Notifications
+            <span class="notification-count badge rounded-pill bg-danger">0</span>
+            <button class="notification-clear-all btn btn-sm btn-outline-danger ms-1">Dismiss All</button>
       </h5>
       <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
