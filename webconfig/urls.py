@@ -17,7 +17,6 @@ from django.contrib import admin
 from django.urls import path
 from website import views as frontend
 
-
 from socialmedia.views import (
     ChatEndpoint,
     NotifsEndpoint,

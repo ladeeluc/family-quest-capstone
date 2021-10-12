@@ -66,11 +66,11 @@ class GenericFormView(View):
     def post(self, request, *args, **kwargs):
         form = self.FormClass(request.POST)
         if form.is_valid():
-            res = self._handle_submission(request, form.cleaned_data)
+            res = self._handle_submission(request, form.cleaned_data,form)
             if res:
                 return res
         return render(request, self.template_name, {"form": form, "template_text": self.template_text})
 
-    def _handle_submission(self, request, form):
+    def _handle_submission(self, request, form_data,raw_form):
         return NotImplemented
 
