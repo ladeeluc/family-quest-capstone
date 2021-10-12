@@ -11,7 +11,7 @@ def member_detail(request, id):
     return render(request,"profile_detail.html", {'member': member} )
 
 
-@login_required # will go to log in page if not logged in 
+# @login_required # will go to log in page if not logged in 
 def add_member(request):
     if request.method == "POST":
         form= AddProfileForm(request.POST)
@@ -29,7 +29,9 @@ def add_member(request):
                 is_claimed = data['is_claimed'],
                 facts = data['facts']          
                 )
-            return HttpResponseRedirect(reverse("home"))
+        if form.is_valid():
+            form.save()
+        return HttpResponseRedirect(reverse("home"))
     form=AddProfileForm()
 
     return render(request, "generic_form.html", {"form": form})
