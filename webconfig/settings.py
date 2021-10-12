@@ -46,9 +46,7 @@ INSTALLED_APPS = [
     'website',
     'useraccount',
     'familystructure',
-    'socialmedia',
-    'memberProfile'
-    
+    'socialmedia',    
 ]
 
 MIDDLEWARE = [

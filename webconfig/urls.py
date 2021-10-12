@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from website import views as frontend
-from memberProfile.views import add_member,member_detail
+
 
 from socialmedia.views import (
     ChatEndpoint,
@@ -36,8 +36,7 @@ urlpatterns = [
     path('logout/',frontend.Logout.as_view(),name='logout'),
     path('signup/',frontend.Signup.as_view(),name='signup'),
     path('login/',frontend.Login.as_view(),name='login'),
-    path('profile/',add_member , name='profile'),
-    path('profile/<int:id>/', member_detail, name='profile_view'),
-
+    # path('profile/',add_member , name='profile'),
+    # path('profile/<int:id>/', member_detail, name='profile_view'),
 ]
 

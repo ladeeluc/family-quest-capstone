@@ -7,7 +7,6 @@ After cloning the repo, create a `.env` file and fill it in using this template 
 DEBUG=True|False
 SECRET_KEY="somesecretkeyhere"
 ```
-
 Then run these commands to start the app:
 
 1. `poetry install`
