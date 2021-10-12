@@ -31,7 +31,7 @@ def add_member(request):
                 )
         if form.is_valid():
             form.save()
-        return HttpResponseRedirect(reverse("home"))
+        return HttpResponseRedirect(reverse('profile_view', args=(id,)))
     form=AddProfileForm()
 
     return render(request, "generic_form.html", {"form": form})

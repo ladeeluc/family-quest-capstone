@@ -35,7 +35,7 @@ urlpatterns = [
     path('signup/',frontend.Signup.as_view(),name='signup'),
     path('login/',frontend.Login.as_view(),name='login'),
     path('profile/',add_member , name='profile'),
-    path('profile/<int:id>/', member_detail),
+    path('profile/<int:id>/', member_detail, name='profile_view'),
 
 ]
 
