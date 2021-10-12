@@ -173,7 +173,7 @@ class MessageNotification(BaseNotification):
             'type': 'message',
             'from': str(self.target_message.author),
             'created_at': self.created_at,
-            'url': f"reverse('chat detail view name, fixme when one exists', {self.target_message.chat.id})",
+            'url': reverse('chat', args=[self.target_message.chat.id]),
         }
 
     def json_serialize(self):
