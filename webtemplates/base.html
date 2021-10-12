@@ -8,6 +8,9 @@
     {% load django_bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
+    {% load static %}
+    <link rel='stylesheet' href="{% static 'css/style.css' %}" />
+    <script src="{% static 'js/utils.js' %}"></script>
 </head>
 <body>
     {% include 'navbar.html' %}
