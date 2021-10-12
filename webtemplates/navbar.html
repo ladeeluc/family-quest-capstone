@@ -45,16 +45,15 @@
             <span class="notification-count badge rounded-pill bg-danger">0</span>
             <button class="notification-clear-all btn btn-sm btn-outline-danger ms-1">Dismiss All</button>
       </h5>
-      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      <button type="button" class="btn-close text-reset mb-2" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     
     <div class="notifications offcanvas-body"></div>
 
     {% if user.is_authenticated %}
+    <link rel="stylesheet" href="{% static 'css/notification.css' %}">
     <script src="{% static 'js/notification.js' %}"></script>
-    <div class="notifications-list container-fluid">
-        
-    </div>
+    <div class="notifications-list container-fluid"></div>
     <script id="notification-widget-insertion">
         new NotificationWidget(document.querySelector("#offcanvasRight"));
     </script>
