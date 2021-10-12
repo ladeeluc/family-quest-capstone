@@ -68,7 +68,7 @@ class Person(models.Model):
     )
     
     death_date = models.DateField(
-        _('birth date'),
+        _('death date'),
         auto_now=False,
         auto_now_add=False,
         blank=True,
@@ -80,7 +80,7 @@ class Person(models.Model):
         default=False,
     )
     
-    facts = ListAsStringField(default='[]', blank=True, null=True)
+    facts = ListAsStringField(default=[], blank=True, null=True)
 
     def __str__(self):
         middle = ''
@@ -127,8 +127,7 @@ class FamilyCircle(models.Model):
     | :---------- | :------------------ |
     | name        | 64 chars            |
     | members     | mtm Person          |
-    | managers    | mtm Person          |
-    | posts       | mtm Post            | # TODO
+    | managers    | mtm UserAccount     |
     """
     name = models.CharField(_('name'), max_length=64)
     members = models.ManyToManyField(
@@ -137,11 +136,10 @@ class FamilyCircle(models.Model):
         related_name='members',
     )
     managers = models.ManyToManyField(
-        'familystructure.Person',
+        'useraccount.UserAccount',
         verbose_name=_('managers'),
         related_name='managers',
     )
-    # posts = models.ManyToManyField('???.Post', verbose_name=_('posts'))
 
     def __str__(self):
         return f'{self.name} ({len(self.members.all())} members)'
