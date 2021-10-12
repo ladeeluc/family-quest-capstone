@@ -16,7 +16,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from website import views as frontend
-
 from socialmedia.views import (
     ChatEndpoint,
     NotifsEndpoint,
@@ -35,5 +34,7 @@ urlpatterns = [
     path('logout/',frontend.Logout.as_view(),name='logout'),
     path('signup/',frontend.Signup.as_view(),name='signup'),
     path('login/',frontend.Login.as_view(),name='login'),
-]
+    path('404/',frontend.View404.as_view()),
+    # path('400/',frontend.View400.as_view()),
 
+]

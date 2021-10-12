@@ -1,3 +1,4 @@
+
 from django.shortcuts import render, HttpResponseRedirect, reverse, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -7,7 +8,10 @@ from useraccount.models import UserAccount
 
 from django.views.generic import View
 from website.base_views import GenericFormView
-
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.http import Http404
+from django.views import View
 
 
 class Home(LoginRequiredMixin, View):
@@ -47,3 +51,9 @@ class Signup(GenericFormView):
         if user:
             login(request,user)
             return redirect('home')
+
+# Create your views here.
+class View404(View):
+    def get(request):
+        raise Http404()
+
