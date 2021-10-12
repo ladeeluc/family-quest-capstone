@@ -10,7 +10,7 @@ from django.views.generic import View
 from website.base_views import GenericFormView
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.http import Http404
+from django.http import Http404 , HttpResponseServerError
 from django.views import View
 
 
@@ -57,3 +57,6 @@ class View404(View):
     def get(request):
         raise Http404()
 
+class View500(View):
+    def get(request):
+        raise HttpResponseServerError()
