@@ -31,13 +31,15 @@ class Login(GenericFormView):
     FormClass = LoginForm
     template_text = {"header":"Log In to Family Quest", "submit":"Log In"}
 
-    def _handle_submission(self, request, form):
+    def _handle_submission(self, request, form, raw_form):
         user = authenticate(request, email=form.get('email'), password=form.get('password'))
         if user:
             login(request, user)
             return redirect('home')
         else:
-            self.add_error(None, 'Incorrect email or password')
+            raw_form.add_error(None, 'Incorrect email or password')
+            raw_form.add_error('email', '')
+            raw_form.add_error('password', '')
 
 class Signup(GenericFormView):
     FormClass = SignupForm
@@ -58,8 +60,10 @@ class Signup(GenericFormView):
                 password=form_data.get('password')
             )
     
-        except IntegrityError: 
+        except IntegrityError:
             raw_form.add_error('email', 'This email address is already in use.')
+            raw_form.add_error('password', '')
+            raw_form.add_error('confirm_password', '')
                 
         if user:
             login(request, user)
