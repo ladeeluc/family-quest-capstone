@@ -17,8 +17,8 @@ from django.views import View
 class Home(LoginRequiredMixin, View):
 
     def get(self, request):
-        raise Exception()
-        # return render(request, 'index.html')
+        # raise Exception()
+        return render(request, 'index.html')
 
 class Logout(View):
 
