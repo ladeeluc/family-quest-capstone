@@ -19,13 +19,15 @@ from website import views as frontend
 
 from socialmedia.views import (
     ChatEndpoint,
+    ChatDetailEndpoint,
     NotifsEndpoint,
     NotifsDetailEndpoint,
 )
 
 urlpatterns = [
     # Endpoints
-    path('api/chat/<int:chat_id>/', ChatEndpoint.as_view()),
+    path('api/chat/', ChatEndpoint.as_view()),
+    path('api/chat/<int:chat_id>/', ChatDetailEndpoint.as_view()),
     path('api/notifs/', NotifsEndpoint.as_view()),
     path('api/notifs/<slug:notif_slug>/', NotifsDetailEndpoint.as_view()),
     
