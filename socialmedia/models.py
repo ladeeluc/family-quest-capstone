@@ -10,12 +10,23 @@ class Post(models.Model):
     | :------------ | :-------------- |
     | title         | 50 chars        |
     | content       | TextField       |
+    | post_photo    | ImageField      |
     | created_at    | DateTime        |
     | author        | fk UserAccount  |
     | family_circle | fk FamilyCircle |
     """
     title = models.CharField(max_length=50)
-    content = models.TextField()
+    content = models.TextField(
+        null=True,
+        blank=True,
+    )
+    post_photo = models.ImageField(
+        _('post photo'),
+        # MEDIA_ROOT/post_photos/ == website/static/uploads/post_photos/
+        upload_to='post_photos/',
+        null=True,
+        blank=True,
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(
         'useraccount.UserAccount',
@@ -128,6 +139,15 @@ class CommentNotification(BaseNotification):
             'url': f"reverse('comment detail view name or post detail view name with hash, fixme when one exists', {self.target_comment.id})",
         }
 
+    def json_serialize(self):
+        return {
+            'slug': f'comment-{self.id}',
+            'type': 'comment',
+            'from': str(self.target_comment.author),
+            'created_at': self.created_at,
+            'url': f"reverse('comment detail view name or post detail view name with hash, fixme when one exists', {self.target_comment.id})",
+        }
+
 class MessageNotification(BaseNotification):
     """
     | Field          | Details         |
@@ -146,6 +166,15 @@ class MessageNotification(BaseNotification):
         related_name='message_notifs',
         on_delete=models.CASCADE,
     )
+
+    def json_serialize(self):
+        return {
+            'slug': f'message-{self.id}',
+            'type': 'message',
+            'from': str(self.target_message.author),
+            'created_at': self.created_at,
+            'url': f"reverse('chat detail view name, fixme when one exists', {self.target_message.chat.id})",
+        }
 
     def json_serialize(self):
         return {

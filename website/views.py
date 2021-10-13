@@ -12,6 +12,8 @@ from useraccount.models import UserAccount
 
 from familystructure.models import Person, Relation
 
+from django.views.generic import View
+
 from website.base_views import GenericFormView
 
 class Home(LoginRequiredMixin, View):
