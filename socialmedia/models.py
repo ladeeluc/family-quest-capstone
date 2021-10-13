@@ -10,12 +10,23 @@ class Post(models.Model):
     | :------------ | :-------------- |
     | title         | 50 chars        |
     | content       | TextField       |
+    | post_photo    | ImageField      |
     | created_at    | DateTime        |
     | author        | fk UserAccount  |
     | family_circle | fk FamilyCircle |
     """
     title = models.CharField(max_length=50)
-    content = models.TextField()
+    content = models.TextField(
+        null=True,
+        blank=True,
+    )
+    post_photo = models.ImageField(
+        _('post photo'),
+        # MEDIA_ROOT/post_photos/ == static/images/post_photos/
+        upload_to='post_photos/',
+        null=True,
+        blank=True,
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(
         'useraccount.UserAccount',
