@@ -41,6 +41,7 @@ urlpatterns = [
     path('person/<int:person_id>/edit/', frontend.PersonEdit.as_view(), name='person_edit'),
     path('settings/', frontend.UserEdit.as_view(), name='user_edit'),
     path('chats/', frontend.AllChats.as_view(), name='chats'),
-    path('chat/<int:chat_id>/', frontend.SingleChat.as_view(), name='chat')
+    path('chat/<int:chat_id>/', frontend.SingleChat.as_view(), name='chat'),
+    path('user/<int:user_id>/', frontend.Home.as_view(), name='user_detail')
 ]
 
