@@ -8,12 +8,14 @@ class NotificationWidget {
         this.notifications = [];
         this.CSRFToken = "";
 
+        this.getNotifications = this.getNotifications.bind(this);
         this.dismissNotification = this.dismissNotification.bind(this);
         this.dismissAllNotifications = this.dismissAllNotifications.bind(this);
 
         this.clearAllElement.addEventListener("click", this.dismissAllNotifications);
 
         this.getNotifications();
+        setInterval(this.getNotifications, 10000);
     }
     async getNotifications() {
         this.setLoading(true);
@@ -54,8 +56,9 @@ class NotificationWidget {
     }
     setLoading(bool) {
         if (bool) {
-            this.badgeElement.innerHTML = `<span role="status" aria-hidden="true" class="hidden spinner-border spinner-border-sm"></span>`; 
+            this.badgeElement.classList.add("loading");
         } else {
+            this.badgeElement.classList.remove("loading");
             this.badgeElement.innerText = this.notifications.length;
             let navBadgeElement = document.querySelector("#nav-notifications-badge");
             if (this.notifications.length <= 0) {
