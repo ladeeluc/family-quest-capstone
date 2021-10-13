@@ -54,23 +54,32 @@ class GenericFormView(View):
     _handle_submission() will be called after validation.
     _handle_submission() can return a response like normal to redirect the user
     or serve alternate post-submission content.
+    _precheck() is an optional method that can check a GET request
+    before the rest of the processing is done
     """
     FormClass = NotImplemented
     template_name = "generic_form.html"
     template_text = {"header":"Generic Form", "submit":"Submit"}
 
     def get(self, request, *args, **kwargs):
+        precheck_result = self._precheck(request)
+        if precheck_result is not None:
+            return precheck_result
+        
         form = self.FormClass()
         return render(request, self.template_name, {"form": form, "template_text": self.template_text})
 
     def post(self, request, *args, **kwargs):
         form = self.FormClass(request.POST)
         if form.is_valid():
-            res = self._handle_submission(request, form.cleaned_data)
+            res = self._handle_submission(request, form.cleaned_data,form)
             if res:
                 return res
         return render(request, self.template_name, {"form": form, "template_text": self.template_text})
 
-    def _handle_submission(self, request, form):
+    def _handle_submission(self, request, form_data, raw_form):
         return NotImplemented
+    
+    def _precheck(self, request):
+        return None
 
