@@ -34,6 +34,7 @@ urlpatterns = [
     path('admin/', admin.site.urls,name='admin'),
     path('logout/',frontend.Logout.as_view(),name='logout'),
     path('signup/',frontend.Signup.as_view(),name='signup'),
+    path('signup/about-you/',frontend.SignupPerson.as_view(),name='claim_person'),
     path('login/',frontend.Login.as_view(),name='login'),
     # path('profile/',add_member , name='profile'),
     # path('profile/<int:id>/', member_detail, name='profile_view'),

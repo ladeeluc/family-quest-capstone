@@ -24,9 +24,9 @@ class AddPersonForm(forms.ModelForm):
         model = Person
         fields = [
             'first_name',
-            'nickname',
             'middle_name',
             'last_name',
-            'title',
             'birth_date',
         ]
+    
+    birth_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}))

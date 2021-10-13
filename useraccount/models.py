@@ -35,7 +35,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
         verbose_name=_('person'),
         related_name='useraccount',
         null=True,
-        on_delete=models.DO_NOTHING,
+        on_delete=models.SET_NULL,
     )
 
     USERNAME_FIELD = 'email'
