@@ -129,3 +129,6 @@ dmypy.json
 
 # Database
 db.sqlite3
+
+# Uploaded images
+website/static/uploads/

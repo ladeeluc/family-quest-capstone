@@ -133,7 +133,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 LOGIN_URL = '/login/'
-MEDIA_ROOT = BASE_DIR / 'static/images/'
+MEDIA_ROOT = BASE_DIR / 'website/static/uploads/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

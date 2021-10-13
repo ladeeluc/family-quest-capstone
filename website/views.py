@@ -8,8 +8,6 @@ from useraccount.models import UserAccount
 from django.views.generic import View
 from website.base_views import GenericFormView
 
-
-
 class Home(LoginRequiredMixin, View):
 
     def get(self, request):

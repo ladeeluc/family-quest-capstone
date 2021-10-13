@@ -77,7 +77,7 @@ class Person(models.Model):
 
     profile_photo = models.ImageField(
         _('profile photo'),
-        # MEDIA_ROOT/profile_photos/ == static/images/profile_photos/
+        # MEDIA_ROOT/profile_photos/ == website/static/uploads/profile_photos/
         upload_to='profile_photos/',
         null=True,
         blank=True,

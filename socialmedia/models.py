@@ -22,7 +22,7 @@ class Post(models.Model):
     )
     post_photo = models.ImageField(
         _('post photo'),
-        # MEDIA_ROOT/post_photos/ == static/images/post_photos/
+        # MEDIA_ROOT/post_photos/ == website/static/uploads/post_photos/
         upload_to='post_photos/',
         null=True,
         blank=True,
