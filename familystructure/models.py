@@ -1,23 +1,23 @@
 from django.db import models
-from django.db.models.fields import related
 from familystructure.fields import ListAsStringField
 
 from django.utils.translation import ugettext_lazy as _
 
 class Person(models.Model):
     """
-    | Field       | Details             |
-    | :---------- | :------------------ |
-    | first_name  | 32 chars            |
-    | nickname    | 32 chars, optional  |
-    | middle_name | 32 chars, optional  |
-    | last_name   | 32 chars            |
-    | title       | 16 chars, optional  |
-    | tagline     | 64 chars, optional  |
-    | birth_date  | Date                |
-    | death_date  | Date, optional      |
-    | is_claimed  | bool, default False |
-    | facts       | ListAsStringField   |
+    | Field           | Details             |
+    | :-------------- | :------------------ |
+    | first_name      | 32 chars            |
+    | nickname        | 32 chars, optional  |
+    | middle_name     | 32 chars, optional  |
+    | last_name       | 32 chars            |
+    | title           | 16 chars, optional  |
+    | tagline         | 64 chars, optional  |
+    | birth_date      | Date                |
+    | death_date      | Date, optional      |
+    | profile_picture | ImageField          |
+    | is_claimed      | bool, default False |
+    | facts           | ListAsStringField   |
     """
 
     class Meta:
@@ -73,6 +73,14 @@ class Person(models.Model):
         auto_now_add=False,
         blank=True,
         null=True,
+    )
+
+    profile_photo = models.ImageField(
+        _('profile photo'),
+        # MEDIA_ROOT/profile_photos/ == website/static/uploads/profile_photos/
+        upload_to='profile_photos/',
+        null=True,
+        blank=True,
     )
     
     is_claimed = models.BooleanField(
