@@ -36,6 +36,7 @@ class EditPersonForm(forms.ModelForm):
     class Meta:
         model = Person
         fields = [
+            'profile_photo',
             'first_name',
             'nickname',
             'middle_name',

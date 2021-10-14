@@ -70,7 +70,7 @@ class GenericFormView(View):
         return render(request, self.template_name, {"form": form, "template_text": self.template_text})
 
     def post(self, request, *args, **kwargs):
-        form = self.FormClass(request.POST)
+        form = self.FormClass(request.POST, request.FILES)
         if form.is_valid():
             res = self._handle_submission(request, form.cleaned_data, form, *args, **kwargs)
             if res:
