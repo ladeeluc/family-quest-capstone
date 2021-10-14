@@ -21,6 +21,7 @@ from socialmedia.views import (
     ChatEndpoint,
     NotifsEndpoint,
     NotifsDetailEndpoint,
+    CreatePostView
 )
 
 urlpatterns = [
@@ -36,7 +37,7 @@ urlpatterns = [
     path('signup/',frontend.Signup.as_view(),name='signup'),
     path('signup/about-you/',frontend.SignupPerson.as_view(),name='claim_person'),
     path('login/',frontend.Login.as_view(),name='login'),
-    # path('profile/',add_member , name='profile'),
+    path('post/', CreatePostView.as_view(), name='post'),
     # path('profile/<int:id>/', member_detail, name='profile_view'),
 ]
 

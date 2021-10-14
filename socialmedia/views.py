@@ -1,15 +1,23 @@
 import re
-from website.base_views import BaseEndpoint
+from django.views.generic import View
+from django.shortcuts import redirect,render, reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
+from website.base_views import BaseEndpoint, GenericFormView
+from socialmedia.forms import AddPostForm
 from socialmedia.models import (
     Chat,
     Message,
     MessageNotification,
     CommentNotification,
+    Post,
 )
 
 from json import (
     loads as hydrate_json,
 )
+
+
+
 
 class ChatEndpoint(BaseEndpoint):
 
@@ -108,3 +116,72 @@ class NotifsDetailEndpoint(BaseEndpoint):
             return self.not_found()
         except CommentNotification.DoesNotExist:
             return self.not_found()
+
+
+
+
+
+#laura code
+class CreatePostView(LoginRequiredMixin,GenericFormView):
+    """creates post by user"""
+    FormClass = AddPostForm
+    template_text = {"header":"Create a Post", "submit":"Get Started"}
+
+    def _precheck(self, request):
+        if request.user.person is not None:
+            return redirect('home')
+    
+    def _handle_submission(self, request, form_data, raw_form):
+        post = Post.objects.create(**form_data)
+
+    # def post(self,request):
+    #     form = GenericFormView(request.POST)
+    #         if form_data.is_valid():
+    #             data = form_data.cleaned_data
+    #             post = Post.objects.create(
+    #             body=form_data["body"], 
+    #             creator=request.user 
+    #             )
+            return redirect(reverse("post_detail", args=(post.id,)))
+
+        return render(request, "generic_form.html", {"form_data": form_data, })
+
+
+# class SignupPerson(GenericFormView):
+#     FormClass = AddPersonForm
+#     template_text = {"header":"Tell us About Yourself", "submit":"All Done"}
+
+#     def _precheck(self, request):
+#         if request.user.person is not None:
+#             return redirect('home')
+
+#     def _handle_submission(self, request, form_data, raw_form):
+#         # Find a matching person, or make a new one
+#         try:
+#             person = Person.objects.get(
+#                 first_name=form_data['first_name'],
+#                 middle_name=form_data['middle_name'],
+#                 last_name=form_data['last_name'],
+#                 birth_date=form_data['birth_date'],
+#             )
+#         except Person.DoesNotExist:
+#             person = Person.objects.create(**form_data)
+        
+#         person.is_claimed = True
+#         person.save()
+#         request.user.person = person
+#         request.user.save()
+        
+#         return redirect('home')
+
+
+
+
+
+# class PostDetailView(View):
+#     def get(self,request,post_id):
+#         post = Post.objects.filter(id=post_id).first()
+#         return render(request, 'post_detail.html', {'post':post})
+            # def get(self,request):
+            #     form = ()
+            # return render(request,"generic_form.html", {'form':form})
