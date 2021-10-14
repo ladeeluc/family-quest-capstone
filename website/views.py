@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 
-from useraccount.forms import LoginForm, SignupForm, AddPersonForm, EditPersonForm, EditUserForm
+from useraccount.forms import EditUserForm, LoginForm, SignupForm, AddPersonForm, EditPersonForm
 from useraccount.models import UserAccount
 
 from familystructure.models import Person, Relation, FamilyCircle
@@ -146,6 +146,19 @@ class PersonEdit(PrefilledFormView):
         return redirect('person_detail', person.id)
         
 
-class UserEdit(GenericFormView):
+class UserEdit(PrefilledFormView):
     FormClass = EditUserForm
     template_text = {"header":"Settings", "submit":"Save"}
+
+    def _get_prefilled_form(self, request):
+        return self.FormClass({
+            'email': request.user.email,
+            'password': 'None',
+            'confirm_password': 'None',
+        })
+    
+    def _handle_submission(self, request, form_data, raw_form, *args, **kwargs):
+        request.user.email = form_data['email']
+        if form_data['password']:
+            request.user.set_password(form_data['password'])
+        request.user.save()

@@ -4,12 +4,12 @@ from useraccount.models import UserAccount
 from json.decoder import JSONDecodeError
 
 class LoginForm(forms.Form):
-    email = forms.CharField(max_length=50)
+    email = forms.CharField(max_length=254)
     # this widget/plugin '.PasswordInput' hides the chars with '****'
     password = forms.CharField(widget=forms.PasswordInput)
 
 class SignupForm(forms.Form):
-    email = forms.CharField(max_length=50)
+    email = forms.CharField(max_length=254)
     # this widget/plugin '.PasswordInput' hides the chars with '****'
     password = forms.CharField(widget=forms.PasswordInput)
     confirm_password = forms.CharField(widget=forms.PasswordInput)
@@ -52,4 +52,14 @@ class EditPersonForm(forms.ModelForm):
     death_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}))
 
 class EditUserForm(forms.Form):
-    pass
+    
+    email = forms.CharField(max_length=254, required=True)
+    # this widget/plugin '.PasswordInput' hides the chars with '****'
+    password = forms.CharField(widget=forms.PasswordInput, required=False)
+    confirm_password = forms.CharField(widget=forms.PasswordInput, required=False)
+    
+    def clean(self):
+        if self.cleaned_data['password'] != self.cleaned_data['confirm_password']:
+            self.add_error('password','')
+            self.add_error('confirm_password','Passwords do not match. Please try again.')
+        return self.cleaned_data
