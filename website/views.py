@@ -62,6 +62,7 @@ class Signup(GenericFormView):
             raw_form.add_error('email', 'This email address is already in use.')
             raw_form.add_error('password', '')
             raw_form.add_error('confirm_password', '')
+            
                 
         if user:
             login(request, user)

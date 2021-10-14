@@ -123,7 +123,7 @@ class NotifsDetailEndpoint(BaseEndpoint):
 
 #laura code
 class CreatePostView(LoginRequiredMixin,GenericFormView):
-    """creates post by user"""
+    """creates post by user in db"""
     FormClass = AddPostForm
     template_text = {"header":"Create a Post", "submit":"Get Started"}
 
@@ -138,8 +138,7 @@ class CreatePostView(LoginRequiredMixin,GenericFormView):
         post = Post.objects.filter(id=post_id).first()
         return render(request, 'post_view', {'post':post})
 
-        # return redirect('post_view',args=(post.id,))
-
+        
            
 
 
