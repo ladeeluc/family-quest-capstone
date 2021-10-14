@@ -1,6 +1,5 @@
 from django import forms
 from familystructure.models import Person
-from django.core.validators import validate_email
 
 class LoginForm(forms.Form):
     email = forms.EmailField()
