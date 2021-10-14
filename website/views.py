@@ -95,3 +95,16 @@ class SignupPerson(GenericFormView):
         request.user.save()
         
         return redirect('home')
+
+class PersonDetail(View):
+    def get(self, request, person_id):
+        try:
+            person = Person.objects.get(id=person_id)
+            return render(request, 'person_detail.html', {
+                'person': person,
+            })
+        except Person.DoesNotExist:
+            redirect('home')
+
+class PersonEdit(GenericFormView):
+    pass
