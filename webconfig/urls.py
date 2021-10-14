@@ -38,6 +38,6 @@ urlpatterns = [
     path('signup/about-you/',frontend.SignupPerson.as_view(),name='claim_person'),
     path('login/',frontend.Login.as_view(),name='login'),
     path('post/', CreatePostView.as_view(), name='post'),
-    # path('profile/<int:id>/', member_detail, name='profile_view'),
+    path('post/<int:id>/', CreatePostView.as_view(), name='post_view'),
 ]
 

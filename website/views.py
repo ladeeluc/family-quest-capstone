@@ -46,8 +46,6 @@ class Signup(GenericFormView):
     template_text = {"header":"Sign Up to Family Quest", "submit":"Get Started"}
 
     def _handle_submission(self, request, form_data, raw_form):
-        # Make sure the database error when email is in use is caught
-        # Tell the user what happened
         user = None
         try:
             UserAccount.objects.create_user(

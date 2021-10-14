@@ -11,9 +11,7 @@ class AddPostForm(forms.ModelForm):
             'title', 
             'content',
             'post_photo',
-            'created_at',
-            'author ',
             'family_circle' 
         ]
     
-    # birth_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}))
+    

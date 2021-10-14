@@ -132,19 +132,28 @@ class CreatePostView(LoginRequiredMixin,GenericFormView):
             return redirect('home')
     
     def _handle_submission(self, request, form_data, raw_form):
-        post = Post.objects.create(**form_data)
+        post = Post.objects.create(**form_data, author=request.user )
 
-    # def post(self,request):
-    #     form = GenericFormView(request.POST)
-    #         if form_data.is_valid():
-    #             data = form_data.cleaned_data
-    #             post = Post.objects.create(
-    #             body=form_data["body"], 
-    #             creator=request.user 
-    #             )
-            return redirect(reverse("post_detail", args=(post.id,)))
+    def get(self,request,post_id):
+        post = Post.objects.filter(id=post_id).first()
+        return render(request, 'post_view', {'post':post})
 
-        return render(request, "generic_form.html", {"form_data": form_data, })
+        # return redirect('post_view',args=(post.id,))
+
+           
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # class SignupPerson(GenericFormView):
@@ -185,3 +194,11 @@ class CreatePostView(LoginRequiredMixin,GenericFormView):
             # def get(self,request):
             #     form = ()
             # return render(request,"generic_form.html", {'form':form})
+    # def post(self,request):
+    #     form = GenericFormView(request.POST)
+    #         if form_data.is_valid():
+    #             data = form_data.cleaned_data
+    #             post = Post.objects.create(
+    #             body=form_data["body"], 
+    #             creator=request.user 
+    #             )
