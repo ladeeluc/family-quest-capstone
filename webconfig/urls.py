@@ -38,5 +38,6 @@ urlpatterns = [
     path('login/',frontend.Login.as_view(),name='login'),
     path('person/<int:person_id>/', frontend.PersonDetail.as_view(), name='person_detail'),
     path('person/<int:person_id>/edit/', frontend.PersonEdit.as_view(), name='person_edit'),
+    path('settings/', frontend.UserEdit.as_view(), name='user_edit'),
 ]
 

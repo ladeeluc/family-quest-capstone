@@ -1,3 +1,4 @@
+from json.decoder import JSONDecodeError
 from django.db import models
 import json
 import re
@@ -31,7 +32,11 @@ class ListAsStringField(models.TextField):
             '"]',
             value,
         )
-        return json.loads(value)
+        try:
+            return json.loads(value)
+        except JSONDecodeError:
+            return value
+
 
     def from_db_value(self, value, expression=None, connection=None, context=None):           
         return self.to_python(value)
@@ -39,8 +44,10 @@ class ListAsStringField(models.TextField):
     # list -> json str
     def get_db_prep_value(self, value, **kwargs):
         if not value: return
-        assert(isinstance(value, list) or isinstance(value, tuple))
-        return json.dumps([str(s) for s in value])
+        if isinstance(value, list) or isinstance(value, tuple):
+            return json.dumps([str(s) for s in value])
+        else:
+            return value
 
     def value_to_string(self, obj):
         value = self._get_val_from_obj(obj)

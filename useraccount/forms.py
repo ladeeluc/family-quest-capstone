@@ -1,6 +1,7 @@
 from django import forms
 from familystructure.models import Person, Relation
 from useraccount.models import UserAccount
+from json.decoder import JSONDecodeError
 
 class LoginForm(forms.Form):
     email = forms.CharField(max_length=50)
@@ -31,5 +32,23 @@ class AddPersonForm(forms.ModelForm):
     
     birth_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}))
 
-class EditPersonForm(forms.Form):
+class EditPersonForm(forms.ModelForm):
+    class Meta:
+        model = Person
+        fields = [
+            'first_name',
+            'nickname',
+            'middle_name',
+            'last_name',
+            'title',
+            'tagline',
+            'birth_date',
+            'death_date',
+            'facts',
+        ]
+    
+    birth_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}))
+    death_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}))
+
+class EditUserForm(forms.Form):
     pass

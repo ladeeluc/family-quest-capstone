@@ -62,7 +62,7 @@ class GenericFormView(View):
     template_text = {"header":"Generic Form", "submit":"Submit"}
 
     def get(self, request, *args, **kwargs):
-        precheck_result = self._precheck(request)
+        precheck_result = self._precheck(request, *args, **kwargs)
         if precheck_result is not None:
             return precheck_result
         
@@ -72,14 +72,25 @@ class GenericFormView(View):
     def post(self, request, *args, **kwargs):
         form = self.FormClass(request.POST)
         if form.is_valid():
-            res = self._handle_submission(request, form.cleaned_data,form)
+            res = self._handle_submission(request, form.cleaned_data, form, *args, **kwargs)
             if res:
                 return res
         return render(request, self.template_name, {"form": form, "template_text": self.template_text})
 
-    def _handle_submission(self, request, form_data, raw_form):
+    def _handle_submission(self, request, form_data, raw_form, *args, **kwargs):
         return NotImplemented
     
-    def _precheck(self, request):
+    def _precheck(self, request, *args, **kwargs):
         return None
 
+class PrefilledFormView(GenericFormView):
+    def get(self, request, *args, **kwargs):
+        precheck_result = self._precheck(request, *args, **kwargs)
+        if precheck_result is not None:
+            return precheck_result
+        
+        form = self._get_prefilled_form(request, *args, **kwargs)
+        return render(request, self.template_name, {"form": form, "template_text": self.template_text})
+
+    def _get_prefilled_form(self, request):
+        return NotImplemented
