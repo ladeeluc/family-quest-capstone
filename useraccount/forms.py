@@ -29,4 +29,4 @@ class AddPersonForm(forms.ModelForm):
             'birth_date',
         ]
     
-    birth_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}))
+    birth_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}))    
