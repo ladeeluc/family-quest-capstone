@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+{% url 'person_edit' person.id as edit %}
+
+<div class="container-fluid">
+    <h1>{{person}}'s Profile</h1>
+    <h2>{{person.tagline}}</h2>
+
+    {% include 'generic_image.html' with photo=person.profile_photo style='width: 100px' %}
+
+    <p><b>Born: </b>{{person.birth_date|date:'l, F j, Y'}}</p>
+    {% if person.death_date %}
+    <p><b>Died: </b>{{person.death_date|date:'l, F j, Y'}}</p>
+    {% endif %}
+
+    <h3>Facts</h3>
+    {% if person.facts %}
+    <ul>
+    {% for fact in person.facts %}
+      <li>{{fact}}</li>
+    {% endfor %}
+    </ul>
+    {% else %}
+    <p>No facts yet... edit this person's profile to add some!</p>
+    {% endif %}
+
+    {% if request.user.person == person %}
+    <a class="btn btn-outline-secondary" href="{{edit}}">Edit</a>
+    {% endif %}
+</div>
+{% endblock body %}

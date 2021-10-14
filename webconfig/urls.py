@@ -36,7 +36,8 @@ urlpatterns = [
     path('signup/',frontend.Signup.as_view(),name='signup'),
     path('signup/about-you/',frontend.SignupPerson.as_view(),name='claim_person'),
     path('login/',frontend.Login.as_view(),name='login'),
-    # path('profile/',add_member , name='profile'),
-    # path('profile/<int:id>/', member_detail, name='profile_view'),
+    path('person/<int:person_id>/', frontend.PersonDetail.as_view(), name='person_detail'),
+    path('person/<int:person_id>/edit/', frontend.PersonEdit.as_view(), name='person_edit'),
+    path('settings/', frontend.UserEdit.as_view(), name='user_edit'),
 ]
 
