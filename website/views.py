@@ -1,7 +1,7 @@
 
 from django import forms
 from django.views.generic import View
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponseRedirect, reverse
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -39,7 +39,7 @@ class Login(GenericFormView):
         user = authenticate(request, email=form.get('email'), password=form.get('password'))
         if user:
             login(request, user)
-            return redirect('home')
+            return HttpResponseRedirect(request.GET.get('next', reverse('home')))
         else:
             raw_form.add_error(None, 'Incorrect email or password')
             raw_form.add_error('email', '')
@@ -73,7 +73,7 @@ class Signup(GenericFormView):
             login(request, user)
             return redirect('claim_person')
     
-class SignupPerson(GenericFormView):
+class SignupPerson(LoginRequiredMixin, GenericFormView):
     FormClass = AddPersonForm
     template_text = {"header":"Tell us About Yourself", "submit":"All Done"}
 
@@ -113,7 +113,7 @@ class PersonDetail(View):
         except Person.DoesNotExist:
             return redirect('home')
 
-class PersonEdit(PrefilledFormView):
+class PersonEdit(LoginRequiredMixin, PrefilledFormView):
     FormClass = EditPersonForm
     template_text = {"header":"Edit Person", "submit":"Save"}
 
@@ -128,7 +128,9 @@ class PersonEdit(PrefilledFormView):
             return redirect('person_detail', person_id)
 
     def _get_prefilled_form(self, request, person_id):
-        return self.FormClass(vars(Person.objects.get(id=person_id)))
+        initial = vars(Person.objects.get(id=person_id))
+        initial['facts'] = "\r\n".join(initial['facts'])
+        return self.FormClass(initial=initial)
         
     def _handle_submission(self, request, form_data, raw_form, person_id):
         person = Person.objects.get(id=person_id)
@@ -141,27 +143,35 @@ class PersonEdit(PrefilledFormView):
         person.tagline = form_data['tagline']
         person.birth_date = form_data['birth_date']
         person.death_date = form_data['death_date']
-        person.facts = form_data['facts']
+        person.facts = form_data['facts'].split("\r\n")
         person.save()
         return redirect('person_detail', person.id)
         
 
-class UserEdit(PrefilledFormView):
+class UserEdit(LoginRequiredMixin, PrefilledFormView):
     FormClass = EditUserForm
     template_text = {"header":"Settings", "submit":"Save"}
 
     def _get_prefilled_form(self, request):
-        return self.FormClass({
+        return self.FormClass(initial={
             'email': request.user.email,
             'password': 'None',
             'confirm_password': 'None',
         })
     
     def _handle_submission(self, request, form_data, raw_form, *args, **kwargs):
-        request.user.email = form_data['email']
-        if form_data['password']:
-            request.user.set_password(form_data['password'])
-        request.user.save()
+        try:
+            request.user.email = form_data['email']
+            if form_data['password']:
+                request.user.set_password(form_data['password'])
+            request.user.save()
+            user = authenticate(request, email=form_data['email'], password=form_data['password'])
+            if user:
+                login(request, user)
+        except IntegrityError:
+            raw_form.add_error('email', 'This email address is already in use.')
+            raw_form.add_error('password', '')
+            raw_form.add_error('confirm_password', '')
 
 class AllChats(LoginRequiredMixin, View):
     

@@ -1,7 +1,5 @@
 from django import forms
 from familystructure.models import Person, Relation
-from useraccount.models import UserAccount
-from json.decoder import JSONDecodeError
 
 class LoginForm(forms.Form):
     email = forms.EmailField()
