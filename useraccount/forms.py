@@ -1,5 +1,5 @@
 from django import forms
-from familystructure.models import Person, Relation
+from familystructure.models import Person, Relation, FamilyCircle
 
 class LoginForm(forms.Form):
     email = forms.EmailField()
@@ -46,6 +46,9 @@ class EditPersonForm(forms.ModelForm):
     
     birth_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}))
     death_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}), required=False)
+
+class ChooseRelatedPersonForm(forms.Form):
+    person = forms.ModelChoiceField(Person.objects.all())
 
 class EditUserForm(forms.Form):
     

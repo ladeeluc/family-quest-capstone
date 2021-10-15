@@ -55,6 +55,9 @@ class FamilyCircle(models.Model):
 
     def __str__(self):
         return f'{self.name} ({len(self.members.all())} members)'
+    
+    def query_detached_people(self):
+        return self.members.filter(relations_in__isnull=True, relations_out__isnull=True)
 
 class Person(models.Model):
     """
