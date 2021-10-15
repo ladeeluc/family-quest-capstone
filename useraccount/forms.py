@@ -4,12 +4,12 @@ from useraccount.models import UserAccount
 from json.decoder import JSONDecodeError
 
 class LoginForm(forms.Form):
-    email = forms.CharField(max_length=254)
+    email = forms.EmailField()
     # this widget/plugin '.PasswordInput' hides the chars with '****'
     password = forms.CharField(widget=forms.PasswordInput)
 
 class SignupForm(forms.Form):
-    email = forms.CharField(max_length=254)
+    email = forms.EmailField()
     # this widget/plugin '.PasswordInput' hides the chars with '****'
     password = forms.CharField(widget=forms.PasswordInput)
     confirm_password = forms.CharField(widget=forms.PasswordInput)
