@@ -122,14 +122,7 @@ class PersonEdit(PrefilledFormView):
             return redirect('person_detail', person_id)
         try:
             person = Person.objects.get(id=person_id)
-            circles = person.family_circles.all().intersection(
-                request.user.person.family_circles.all()
-            )
-            is_not_manager = all(
-                request.user not in mgrs for mgrs in
-                [fc.managers.all() for fc in circles]
-            )
-            if (request.user.person != person and is_not_manager):
+            if (request.user.person != person and request.user not in person.query_managers()):
                 return redirect('person_detail', person_id)
         except Person.DoesNotExist:
             return redirect('person_detail', person_id)

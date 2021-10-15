@@ -41,6 +41,7 @@ urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
     path('logout/', frontend.Logout.as_view(), name='logout'),
     path('signup/', frontend.Signup.as_view(), name='signup'),
+    path('signup/about-you/', frontend.SignupPerson.as_view(), name='claim_person'),
     path('login/', frontend.Login.as_view(), name='login'),
     path('person/<int:person_id>/', frontend.PersonDetail.as_view(), name='person_detail'),
     path('person/<int:person_id>/edit/', frontend.PersonEdit.as_view(), name='person_edit'),
