@@ -141,7 +141,7 @@ class PostDetailView(LoginRequiredMixin, View):# family circle same
 
 
 
-#inheirtance - programming concept
+
 
 
 
