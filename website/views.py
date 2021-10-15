@@ -130,7 +130,7 @@ class PersonEdit(LoginRequiredMixin, PrefilledFormView):
 
     def _get_prefilled_form(self, request, person_id):
         initial = vars(Person.objects.get(id=person_id))
-        initial['facts'] = "\r\n".join(initial['facts'])
+        initial['facts'] = "\r\n".join(initial['facts'] or [])
         return self.FormClass(initial=initial)
         
     def _handle_submission(self, request, form_data, raw_form, person_id):
@@ -144,7 +144,7 @@ class PersonEdit(LoginRequiredMixin, PrefilledFormView):
         person.tagline = form_data['tagline']
         person.birth_date = form_data['birth_date']
         person.death_date = form_data['death_date']
-        person.facts = form_data['facts'].split("\r\n")
+        person.facts = form_data['facts'].split("\r\n") if len(form_data['facts']) > 0 else ""
         person.save()
         return redirect('person_detail', person.id)
 
