@@ -21,6 +21,12 @@ from socialmedia.models import Chat
 from functools import reduce
 
 from familystructure.mixins import PersonRequiredMixin
+from socialmedia.forms import TextPostForm, ImagePostForm
+from socialmedia.models import Post
+from familystructure.models import FamilyCircle
+
+# TEMP IMPORT
+from django.shortcuts import HttpResponse
 
 class Home(LoginRequiredMixin, View):
 
@@ -209,5 +215,37 @@ class SingleChat(LoginRequiredMixin, View):
             }
         return render(request, 'chat.html', context)
 
-class CreatePost(GenericFormView):
-    pass
+class CreatePost(View):
+    
+    def get(self, request, circle_id):
+        return self._render_template(request, circle_id, None, "text")
+    
+    def _render_template(self, request, circle_id, form, post_type):
+        circle = FamilyCircle.objects.get(id=circle_id)
+        return render(request, 'create_post.html', {
+            "text_form":form or TextPostForm() if post_type == "text" else TextPostForm(),
+            "image_form":form or ImagePostForm() if post_type == "image" else ImagePostForm(),
+            f"{post_type}_link_class":"active",
+            f"{post_type}_form_class":"show active",
+            "family_circle":circle
+        })
+    
+    def post(self, request, circle_id):
+        post_type = request.GET.get("type")
+        
+        if post_type == "text":
+            form = TextPostForm(request.POST)
+        elif post_type == "image":
+            form = ImagePostForm(request.POST, request.FILES)
+        if form.is_valid():
+            data = form.cleaned_data
+            post = Post.objects.create(
+                title=data.get("title"),
+                content=data.get("content"),
+                post_photo=data.get("post_photo"),
+                author=request.user,
+                family_circle=FamilyCircle.objects.get(id=circle_id)
+            )
+            return redirect(reverse('post_detail', args=[post.id]))
+        return self._render_template(request, circle_id, form, post_type)
+        
