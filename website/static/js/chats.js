@@ -65,7 +65,8 @@ class ChatsWidget {
     }
 }
 class CreateChatForm {
-    constructor(formElement, CSRFToken) {
+    constructor(formElement, CSRFToken, userid) {
+        this.userid = userid;
         this.CSRFToken = CSRFToken;
         this.element = formElement;
         this.submitButton = formElement.querySelector('button[type="submit"]');
@@ -109,7 +110,7 @@ class CreateChatForm {
             this.CSRFToken = res.headers.get("X-CSRFToken");
             this.suggestions = (await res.json()).useraccounts;
             let ids = this.users.map(user => user.id);
-            this.suggestions = this.suggestions.filter(user => !(ids.includes(user.id)));
+            this.suggestions = this.suggestions.filter(user => (!ids.includes(user.id) && (this.userid != user.id)));
             this.renderSuggestions();
         }
     }

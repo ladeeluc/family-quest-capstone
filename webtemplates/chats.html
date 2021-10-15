@@ -45,6 +45,6 @@
 <script src="{% static 'js/chats.js' %}"></script>
 <script>
     new ChatsWidget(document.querySelector(".chats-list"));
-    new CreateChatForm(document.querySelector("#create-chat"), "{{csrf_token}}");
+    new CreateChatForm(document.querySelector("#create-chat"), "{{csrf_token}}", "{{user.id}}");
 </script>
 {% endblock %}
