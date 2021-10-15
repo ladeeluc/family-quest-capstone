@@ -13,7 +13,7 @@ from socialmedia.models import (
     CommentNotification,
     Post,
 )
-
+#laura code
 class FamilyCirclePostView(LoginRequiredMixin, View):
     def get(self, request):
         try:
