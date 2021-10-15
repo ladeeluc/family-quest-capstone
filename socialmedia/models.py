@@ -138,6 +138,9 @@ class CommentNotification(BaseNotification):
             'created_at': self.created_at,
             'url': f"reverse('comment detail view name or post detail view name with hash, fixme when one exists', {self.target_comment.id})",
         }
+    
+    def __str__(self):
+        return f'Comment notif for {self.target_user} from {self.target_comment.author}'
 
     def json_serialize(self):
         return {
@@ -173,8 +176,11 @@ class MessageNotification(BaseNotification):
             'type': 'message',
             'from': str(self.target_message.author),
             'created_at': self.created_at,
-            'url': f"reverse('chat detail view name, fixme when one exists', {self.target_message.chat.id})",
+            'url': reverse('chat', args=[self.target_message.chat.id]),
         }
+    
+    def __str__(self):
+        return f'Post notif for {self.target_user} from {self.target_message.author}'
 
     def json_serialize(self):
         return {
@@ -182,7 +188,7 @@ class MessageNotification(BaseNotification):
             'type': 'message',
             'from': str(self.target_message.author),
             'created_at': self.created_at,
-            'url': f"reverse('chat detail view name, fixme when one exists', {self.target_message.chat.id})",
+            'url': reverse('chat', args=[self.target_message.chat.id]),
         }
 
 class Chat(models.Model):
@@ -194,6 +200,7 @@ class Chat(models.Model):
     members = models.ManyToManyField(
         'useraccount.UserAccount',
         verbose_name=_('members'),
+        related_name='chats',
     )
 
     def __str__(self):
