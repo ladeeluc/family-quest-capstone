@@ -20,6 +20,8 @@ from socialmedia.models import Chat
 
 from functools import reduce
 
+from familystructure.mixins import PersonRequiredMixin
+
 class Home(LoginRequiredMixin, View):
 
     def get(self, request):
@@ -101,7 +103,7 @@ class SignupPerson(LoginRequiredMixin, GenericFormView):
         request.user.person = person
         request.user.save()
         
-        return redirect('home')
+        return HttpResponseRedirect(request.GET.get('next', reverse('person_detail', args=[person.id])))
 
 class PersonDetail(View):
     def get(self, request, person_id):
@@ -113,7 +115,7 @@ class PersonDetail(View):
         except Person.DoesNotExist:
             return redirect('home')
 
-class PersonEdit(LoginRequiredMixin, PrefilledFormView):
+class PersonEdit(PersonRequiredMixin, PrefilledFormView):
     FormClass = EditPersonForm
     template_text = {"header":"Edit Person", "submit":"Save"}
 
