@@ -16,12 +16,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from website import views as frontend
+from familystructure.views import (
+    FamilyCircleListView,
+    FamilyCirclePostView
+)
 
 from socialmedia.views import (
     ChatEndpoint,
     NotifsEndpoint,
     NotifsDetailEndpoint,
-    CreatePostView
+    CreatePostView,
+    PostDetailView
 )
 
 urlpatterns = [
@@ -38,6 +43,8 @@ urlpatterns = [
     path('signup/about-you/',frontend.SignupPerson.as_view(),name='claim_person'),
     path('login/',frontend.Login.as_view(),name='login'),
     path('post/', CreatePostView.as_view(), name='post'),
-    path('post/<int:id>/', CreatePostView.as_view(), name='post_view'),
+    path('post/<int:post_id>/', PostDetailView.as_view(), name='post_view'),
+    path('family_posts/', FamilyCirclePostView.as_view(), name='family_posts'),
+    path('family_members/', FamilyCircleListView.as_view(), name='family_members')
 ]
 
