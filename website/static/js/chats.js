@@ -12,15 +12,12 @@ class ChatsWidget {
     }
     async getChats() {
         this.setLoading(true);
-        let count = this.chats.length;
         let res = await fetch("/api/chats/");
         if (res.ok) {
             this.CSRFToken = res.headers.get("X-CSRFToken");
             this.chats = (await res.json()).chats;
         }
-        if (this.chats.length > count) {
-            this.render();
-        }
+        this.render();
         this.setLoading(false);
     }
     async createChat() {

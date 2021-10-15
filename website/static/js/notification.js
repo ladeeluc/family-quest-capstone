@@ -19,7 +19,6 @@ class NotificationWidget {
     }
     async getNotifications() {
         this.setLoading(true);
-        let count = this.notifications.length;
         let res = await fetch("/api/notifs/");
         if (res.ok) {
             this.CSRFToken = res.headers.get("X-CSRFToken");
