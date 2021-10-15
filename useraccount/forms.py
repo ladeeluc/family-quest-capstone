@@ -1,7 +1,5 @@
 from django import forms
 from familystructure.models import Person, Relation
-from useraccount.models import UserAccount
-from json.decoder import JSONDecodeError
 
 class LoginForm(forms.Form):
     email = forms.EmailField()
@@ -47,7 +45,7 @@ class EditPersonForm(forms.ModelForm):
         ]
     
     birth_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}))
-    death_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}))
+    death_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}), required=False)
 
 class EditUserForm(forms.Form):
     
