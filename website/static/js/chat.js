@@ -72,12 +72,12 @@ class ChatWidget {
             item.classList.add("list-group-item", "list-group-item-action", "py-3");
             item.innerHTML = `
             <div class="d-flex w-100">
-                <a class="portrait me-3" href="/user/${chat.author.account_id}/">
-                    <img src="${chat.author.profile || "/static/assets/placeholder.png"}" />
+                <a class="portrait me-3" href="${chat.author.profile_url}">
+                    <img src="${chat.author.photo_url}" />
                 </a>
                 <div class="mb-1 flex-grow-1">
                     <div class="d-flex">
-                        <a class="text-primary me-auto fs-5 text-ellipsis text-decoration-hover-only"href="/user/${chat.author.account_id}/">${chat.author.name || chat.author.email}</a>
+                        <a class="text-primary me-auto fs-5 text-ellipsis text-decoration-hover-only"href="${chat.author.profile_url}">${chat.author.name || chat.author.email}</a>
                         <small class="text-muted text-nowrap ms-2">${getDateString(new Date(chat.sent_at))}</small>
                     </div>
                     <div>${chat.content}</div>
