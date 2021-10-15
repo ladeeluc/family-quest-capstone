@@ -81,7 +81,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
                 'account_id': self.id,
                 'person_id': self.person.id,
                 'email': self.email,
-                'profile_url': reverse('user_detail', args=[self.id]),
+                'profile_url': reverse('person_detail', args=[self.person.id]),
                 'photo_url': f"/static/uploads{self.person.profile_photo.url}" if self.person.profile_photo else "/static/images/default.png",
                 'name': str(self.person),
                 'tagline': self.person.tagline,
