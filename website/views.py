@@ -150,7 +150,7 @@ class PersonEdit(LoginRequiredMixin, PrefilledFormView):
         person.tagline = form_data['tagline']
         person.birth_date = form_data['birth_date']
         person.death_date = form_data['death_date']
-        person.facts = form_data['facts'].split("\r\n")
+        person.facts = form_data['facts'].split("\r\n") if len(form_data['facts']) > 0 else ""
         person.save()
         return redirect('person_detail', person.id)
         
