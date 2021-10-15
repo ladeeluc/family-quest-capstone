@@ -20,9 +20,6 @@ class ChatsWidget {
         this.render();
         this.setLoading(false);
     }
-    async createChat() {
-        
-    }
     async setLoading(bool) {
         if (bool) {
             this.element.classList.add("loading");
