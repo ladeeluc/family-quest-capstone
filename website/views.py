@@ -1,5 +1,6 @@
 
 from django import forms
+from django.db.models.query_utils import Q
 from django.views.generic import View
 from django.shortcuts import render, redirect, HttpResponseRedirect, reverse
 from django.contrib.auth import login, logout, authenticate
@@ -7,7 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 
-from useraccount.forms import EditUserForm, LoginForm, SignupForm, AddPersonForm, EditPersonForm
+from useraccount.forms import ChooseRelatedPersonForm, EditUserForm, LoginForm, SignupForm, AddPersonForm, EditPersonForm
 from useraccount.models import UserAccount
 
 from familystructure.models import Person, Relation, FamilyCircle
@@ -146,8 +147,63 @@ class PersonEdit(LoginRequiredMixin, PrefilledFormView):
         person.facts = form_data['facts'].split("\r\n")
         person.save()
         return redirect('person_detail', person.id)
-        
 
+class PersonAddSpouse(PersonEdit):
+    FormClass = ChooseRelatedPersonForm
+    template_text = {"header":"Add Spouse", "submit":"Add"}
+
+    def _get_prefilled_form(self, request, person_id):
+        person = Person.objects.get(id=person_id) # exists by _precheck
+
+        shared_circles = FamilyCircle.objects.filter(Q(members=request.user.person.id) | Q(members=person.id)).distinct()
+        try:
+            spouse_rels = person.relations_in.filter(is_upward=False).union(person.relations_out.filter(is_upward=False))
+        except AttributeError:
+            spouse_rels = Relation.objects.none()
+        spouses = list(set(rel.target.id if rel.target != self else rel.source.id for rel in spouse_rels))
+        choices = (
+            Person.objects
+                .filter(family_circles__in=shared_circles)
+                .exclude(id__in=spouses)
+                .distinct()
+        )
+        form = self.FormClass()
+        form.fields['person'].queryset = choices
+        return form
+        
+    def _handle_submission(self, request, form_data, raw_form, person_id):
+        person = Person.objects.get(id=person_id) # exists by _precheck
+        Relation.objects.create(source=person, target=form_data['person'], is_upward=False)
+        return redirect('person_detail', person_id)
+
+class PersonAddParent(PersonEdit):
+    FormClass = ChooseRelatedPersonForm
+    template_text = {"header":"Add Parent", "submit":"Add"}
+
+    def _get_prefilled_form(self, request, person_id):
+        person = Person.objects.get(id=person_id) # exists by _precheck
+
+        shared_circles = FamilyCircle.objects.filter(Q(members=request.user.person.id) | Q(members=person.id)).distinct()
+        try:
+            parent_rels = person.relations_out.filter(is_upward=True)
+        except AttributeError:
+            parent_rels = Relation.objects.none()
+        parents = list(set(rel.target.id if rel.target != self else rel.source.id for rel in parent_rels))
+        choices = (
+            Person.objects
+                .filter(family_circles__in=shared_circles)
+                .exclude(id__in=parents)
+                .distinct()
+        )
+        form = self.FormClass()
+        form.fields['person'].queryset = choices
+        return form
+        
+    def _handle_submission(self, request, form_data, raw_form, person_id):
+        person = Person.objects.get(id=person_id) # exists by _precheck
+        Relation.objects.create(source=person, target=form_data['person'], is_upward=True)
+        return redirect('person_detail', person_id)
+        
 class UserEdit(LoginRequiredMixin, PrefilledFormView):
     FormClass = EditUserForm
     template_text = {"header":"Settings", "submit":"Save"}

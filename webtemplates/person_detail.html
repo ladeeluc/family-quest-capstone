@@ -3,6 +3,8 @@
 {% block body %}
 
 {% url 'person_edit' person.id as edit %}
+{% url 'person_add_spouse' person.id as add_spouse %}
+{% url 'person_add_parent' person.id as add_parent %}
 
 <div class="container-fluid">
     <h1>{{person}}'s Profile</h1>
@@ -26,7 +28,9 @@
     <p>No facts yet... edit this person's profile to add some!</p>
     {% endif %}
     {% if request.user in person.query_managers %}
-    <a class="btn btn-outline-secondary" href="{{edit}}">Edit</a>
+      <a class="btn btn-outline-primary" href="{{edit}}">Edit</a>
+      <a class="btn btn-outline-secondary" href="{{add_spouse}}">Add Spouse</a>
+      <a class="btn btn-outline-secondary" href="{{add_parent}}">Add Parent</a>
     {% endif %}
 </div>
 {% endblock body %}
