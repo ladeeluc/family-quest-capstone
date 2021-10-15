@@ -21,7 +21,7 @@
                     <h2>Add Participants</h2>
                     <div class="input-group mb-3">
                         <div class="list-group suggestions"></div>
-                        <input id="search-users" type="text" class="form-control" placeholder="Search by name or email address" aria-label="Message">
+                        <input id="search-users" type="text" class="form-control" placeholder="Search by name or email address" aria-label="Search by name or email address" autocomplete="off">
                     </div>
                     <small class="text-muted">Chat Participants</small>
                     <div id="users-list" class="list-group mb-3">
@@ -31,7 +31,7 @@
                     </div>
                     <h2>Opening Message</h2>
                     <div class="mb-3">
-                        <input id="opening-message" type="text" class="form-control fs-5" placeholder="Message..." aria-label="Message">
+                        <input id="opening-message" type="text" class="form-control fs-5" placeholder="Message..." aria-label="Message" autocomplete="off">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -45,6 +45,6 @@
 <script src="{% static 'js/chats.js' %}"></script>
 <script>
     new ChatsWidget(document.querySelector(".chats-list"));
-    new CreateChatForm(document.querySelector("#create-chat"));
+    new CreateChatForm(document.querySelector("#create-chat"), "{{csrf_token}}");
 </script>
 {% endblock %}

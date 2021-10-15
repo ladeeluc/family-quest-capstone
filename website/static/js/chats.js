@@ -71,7 +71,8 @@ class ChatsWidget {
     }
 }
 class CreateChatForm {
-    constructor(formElement) {
+    constructor(formElement, CSRFToken) {
+        this.CSRFToken = CSRFToken;
         this.element = formElement;
         this.submitButton = formElement.querySelector('button[type="submit"]');
         this.searchElement = formElement.querySelector("#search-users");
@@ -87,31 +88,36 @@ class CreateChatForm {
         this.removeUser = this.removeUser.bind(this);
         this.showSuggestions = this.showSuggestions.bind(this);
         this.submit = this.submit.bind(this);
+        this.validate = this.validate.bind(this);
 
         this.searchElement.addEventListener("keydown", this.searchUsers);
         this.searchElement.addEventListener("focus", () => this.showSuggestions(true));
         this.searchElement.addEventListener("blur", () => this.showSuggestions(false));
-        this.element.addEventListener("submit", this.submit)
+        this.element.addEventListener("submit", this.submit);
+        this.messageElement.addEventListener("keyup", this.validate);
 
         this.showSuggestions(true);
     }
 
-    searchUsers() {
-        if (this.searchElement.value === "") {
+    async searchUsers() {
+        let query = this.searchElement.value;
+        if (query === "") {
             this.showSuggestions(false);
             return;
         }
-        let res = [];
-        for (let i = 0; i < 10; i++) {
-            res.push({
-                id:Math.floor(Math.random()*4)+1,
-                name:['','','','Bill "Billy" Harris Doe','Betsy "Bea" Christine Doe','Timothy "Timmy" Jackson Buck','Albert Jeffery Buck'][Math.floor(Math.random()*7)],
-                email:['aaa@gmail.com','bbbbb@gmail.com','bababooey2@gmail.com','dripdrip@drip.net'][Math.floor(Math.random()*4)]
-            });
+        let res = await fetch(`/api/user/search?q=${query}`, {
+            method: "GET",
+            headers: {
+                "X-CSRFToken":this.CSRFToken
+            }
+        });
+        if (res.ok) {
+            this.CSRFToken = res.headers.get("X-CSRFToken");
+            this.suggestions = (await res.json()).useraccounts;
+            let ids = this.users.map(user => user.id);
+            this.suggestions = this.suggestions.filter(user => !(ids.includes(user.id)));
+            this.renderSuggestions();
         }
-        let ids = this.users.map(user => user.id);
-        this.suggestions = res.filter(user => !(ids.includes(user.id)));
-        this.renderSuggestions();
     }
 
     renderSuggestions() {
@@ -128,10 +134,10 @@ class CreateChatForm {
                 `;
             } else {
                 label.innerHTML = `
-                <div class="text-primary">${user.email} ${user.id}</div>
+                <div class="text-primary">${user.email}</div>
                 `;
             }
-            item.addEventListener("click", () => this.addUser(user));
+            item.addEventListener("mousedown", () => this.addUser(user));
             item.append(label);
             this.suggestionsElement.append(item);
         }
@@ -187,15 +193,34 @@ class CreateChatForm {
             item.append(label, closebtn);
             this.listElement.append(item);
         }
-        if (this.users.length === 0) {
+        this.validate();
+    }
+
+    validate() {
+        if (this.users.length === 0 || this.messageElement.value === "") {
             this.submitButton.setAttribute("disabled", "true");
         } else {
             this.submitButton.removeAttribute("disabled");
         }
     }
 
-    submit() {
-
+    async submit(event) {
+        event.preventDefault();
+        this.submitButton.setAttribute("disabled", "true");
+        let res = await fetch(`/api/chats/`, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken":this.CSRFToken
+            },
+            body: JSON.stringify({
+                members:this.users.map(user => user.id),
+                message:this.messageElement.value
+            })
+        });
+        if (res.ok) {
+            window.location.pathname = (await res.json()).url;
+        }
+        this.submitButton.setAttribute("disabled", "false");
     }
 
 }
