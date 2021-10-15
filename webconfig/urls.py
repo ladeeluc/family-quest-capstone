@@ -54,10 +54,10 @@ urlpatterns = [
     path('person/<int:person_id>/add/parent/', frontend.PersonAddParent.as_view(), name='person_add_parent'),
     #path('circle/<int:circle_id>/'),
     path('circle/<int:circle_id>/add/person/', frontend.FamilyCircleAddPerson.as_view(), name='circle_add_person'),
+    path('circle/<int:circle_id>/add/post/', frontend.CreatePost.as_view(), name='create_post'),
     path('settings/', frontend.UserEdit.as_view(), name='user_edit'),
     path('chats/', frontend.AllChats.as_view(), name='chats'),
     path('chat/<int:chat_id>/', frontend.SingleChat.as_view(), name='chat'),
     path('user/<int:user_id>/', frontend.Home.as_view(), name='user_detail'),
-    path('circle/<int:circle_id>/post/', frontend.CreatePost.as_view(), name='create_post')
 ]
 
