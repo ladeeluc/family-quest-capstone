@@ -1,7 +1,7 @@
 
 from django import forms
 from django.views.generic import View
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponseRedirect, reverse
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -39,7 +39,7 @@ class Login(GenericFormView):
         user = authenticate(request, email=form.get('email'), password=form.get('password'))
         if user:
             login(request, user)
-            return redirect('home')
+            return HttpResponseRedirect(request.GET.get('next', reverse('home')))
         else:
             raw_form.add_error(None, 'Incorrect email or password')
             raw_form.add_error('email', '')
