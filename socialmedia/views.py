@@ -4,6 +4,7 @@ from django.shortcuts import redirect,render, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from website.base_views import BaseEndpoint, GenericFormView
 from socialmedia.forms import AddPostForm
+from familystructure.models import Person
 from socialmedia.models import (
     Chat,
     Message,
@@ -122,6 +123,7 @@ class NotifsDetailEndpoint(BaseEndpoint):
 
 
 #laura's code
+
 class CreatePostView(LoginRequiredMixin, GenericFormView):
     """creates post by user in db"""
     FormClass = AddPostForm
@@ -140,8 +142,21 @@ class PostDetailView(LoginRequiredMixin, View):# family circle same
             return redirect('home')    
 
 
+# class FamilyCirclePosts(LoginRequiredMixin, View):
+#     """shows a list of post titles made under the family circle
+#         each post is a clickable link to its post detail page"""
+#     def get(self, request, user_id):
+#         try:
+#             target_user = Person.objects.get(id = user_id)
+#             family_posts = Post.objects.filter(creator=target_user)
+#             return render(render,'family_posts.html', {'family_posts':family_posts, 'target_user': target_user})
 
-#inheirtance - programming concept
+        
+
+  
+
+
+
 
 
 
