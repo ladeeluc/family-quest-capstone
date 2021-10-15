@@ -206,19 +206,20 @@ class PersonAddParent(PersonEdit):
 
 class FamilyCircleAddPerson(LoginRequiredMixin, GenericFormView):
     FormClass = AddPersonForm
-    template_text = {"header":"Create Person", "submit":"All Done"}
+    template_text = {"header":"Add Someone to Your Circle", "submit":"Add"}
 
-    def _precheck(self, request, familycircle_id, *args, **kwargs,):
+    def _precheck(self, request, circle_id, *args, **kwargs,):
         try:
-            circle = FamilyCircle.objects.get(id=familycircle_id)
+            circle = FamilyCircle.objects.get(id=circle_id)
+            self.template_text['header'] = f'Add Someone to {circle.name}'
         except FamilyCircle.DoesNotExist:
             return redirect('home')
 
         if request.user.person is None or request.user.person.family_circles is None:
             return redirect('home')
 
-    def _handle_submission(self, request, form_data, raw_form, familycircle_id):
-        circle = FamilyCircle.objects.get(id=familycircle_id) # covered by _precheck
+    def _handle_submission(self, request, form_data, raw_form, circle_id):
+        circle = FamilyCircle.objects.get(id=circle_id) # covered by _precheck
         # Find a matching person, or make a new one
         try:
             person = Person.objects.get(
@@ -235,6 +236,10 @@ class FamilyCircleAddPerson(LoginRequiredMixin, GenericFormView):
             return redirect('person_detail', person.id)
         else:
             raw_form.add_error(None, 'This person is already in the family circle')
+            raw_form.add_error('first_name', '')
+            raw_form.add_error('middle_name', '')
+            raw_form.add_error('last_name', '')
+            raw_form.add_error('birth_date', '')
 
 class UserEdit(LoginRequiredMixin, PrefilledFormView):
     FormClass = EditUserForm
