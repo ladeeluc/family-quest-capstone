@@ -18,26 +18,35 @@ from django.urls import path
 from website import views as frontend
 
 from socialmedia.views import (
-    ChatEndpoint,
+    ChatsEndpoint,
+    ChatDetailEndpoint,
     NotifsEndpoint,
     NotifsDetailEndpoint,
 )
 
+from useraccount.views import (
+    UserSearchEndpoint,
+)
+
 urlpatterns = [
     # Endpoints
-    path('api/chat/<int:chat_id>/', ChatEndpoint.as_view()),
+    path('api/chats/', ChatsEndpoint.as_view()),
+    path('api/chat/<int:chat_id>/', ChatDetailEndpoint.as_view()),
     path('api/notifs/', NotifsEndpoint.as_view()),
     path('api/notifs/<slug:notif_slug>/', NotifsDetailEndpoint.as_view()),
+    path('api/user/search/', UserSearchEndpoint.as_view()),
     
     # Views
-    path('',frontend.Home.as_view(),name='home'),
-    path('admin/', admin.site.urls,name='admin'),
-    path('logout/',frontend.Logout.as_view(),name='logout'),
-    path('signup/',frontend.Signup.as_view(),name='signup'),
-    path('signup/about-you/',frontend.SignupPerson.as_view(),name='claim_person'),
-    path('login/',frontend.Login.as_view(),name='login'),
+    path('', frontend.Home.as_view(), name='home'),
+    path('admin/', admin.site.urls, name='admin'),
+    path('logout/', frontend.Logout.as_view(), name='logout'),
+    path('signup/', frontend.Signup.as_view(), name='signup'),
+    path('login/', frontend.Login.as_view(), name='login'),
     path('person/<int:person_id>/', frontend.PersonDetail.as_view(), name='person_detail'),
     path('person/<int:person_id>/edit/', frontend.PersonEdit.as_view(), name='person_edit'),
     path('settings/', frontend.UserEdit.as_view(), name='user_edit'),
+    path('chats/', frontend.AllChats.as_view(), name='chats'),
+    path('chat/<int:chat_id>/', frontend.SingleChat.as_view(), name='chat'),
+    path('user/<int:user_id>/', frontend.Home.as_view(), name='user_detail')
 ]
 

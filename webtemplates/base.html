@@ -12,9 +12,18 @@
     <link rel='stylesheet' href="{% static 'css/style.css' %}" />
     <script src="{% static 'js/utils.js' %}"></script>
 </head>
-<body>
+<body class="pretty-scrollbar">
     {% include 'navbar.html' %}
     {% block body %}
     {% endblock %}
 </body>
+<!-- Timezone Localizer -->
+<script>
+    document.querySelectorAll('.tz-localize').forEach(elm => {
+        if (elm.innerText != '') {
+            date = new Date(elm.innerText);
+            elm.innerText = getDateString(date);
+        }
+    });
+</script>
 </html>

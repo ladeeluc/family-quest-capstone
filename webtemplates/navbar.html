@@ -5,6 +5,7 @@
 {% url 'logout' as logout %}
 {% url 'signup' as signup %}
 {% url 'user_edit' as settings %}
+{% url 'chats' as chats %}
 {% if request.user.person %}
     {% url 'person_detail' request.user.person.id as profile %}
 {% else %}
@@ -20,6 +21,9 @@
             {% if user.is_authenticated %}
             <li class="nav-item">
                 <a class="nav-link" href="{{profile}}">Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{chats}}">Chats</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{settings}}">Settings</a>
@@ -57,7 +61,7 @@
       <button type="button" class="btn-close text-reset mb-2" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     
-    <div class="notifications offcanvas-body"></div>
+    <div class="notifications offcanvas-body pretty-scrollbar"></div>
 
     {% if user.is_authenticated %}
     <link rel="stylesheet" href="{% static 'css/notification.css' %}">
