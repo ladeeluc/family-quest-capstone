@@ -7,12 +7,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 
-from useraccount.forms import EditUserForm, LoginForm, SignupForm, AddPersonForm, EditPersonForm
+from useraccount.forms import EditUserForm, LoginForm, SignupForm, AddPersonForm, EditPersonForm, PostForm
 from useraccount.models import UserAccount
 
 from familystructure.models import Person, Relation, FamilyCircle
-
-from django.views.generic import View
 
 from website.base_views import GenericFormView, PrefilledFormView
 
@@ -162,6 +160,18 @@ class UserEdit(PrefilledFormView):
         if form_data['password']:
             request.user.set_password(form_data['password'])
         request.user.save()
+
+class FamilyCircleDetail(LoginRequiredMixin, View):
+
+    def get(self, request, circle_id):
+        # Get all the posts of a family circle
+        # Get the family circle with the circle_id
+        # Its posts are under family_circle.posts.all()
+        # It would be nice to order them by the creation date :)
+        template_name = "fam_cir_post_detail.html"
+        post = UserAccount.objects.filter(id=circle_id).first()
+        context = {"fam_cir_post": post}
+        return render(request, template_name, context)
 
 class AllChats(LoginRequiredMixin, View):
     

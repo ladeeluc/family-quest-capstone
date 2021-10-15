@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="container-fluid">
+    <h1>Family Circle Post Detail</h1>
+    <hr>
+    <p>
+        (Signed in as {{user.email}})
+        {% if user.person.profile_photo %}
+            {% include 'generic_image.html' with photo=user.person.profile_photo style='width: 100px' class='example'%}
+        {% endif %}
+    </p>
+    <ul>
+        <li>{{ post.body|safe }}</li>
+        <img src="{{ header_image.url }}" style="width: 100px;">
+        <li><a href="/user/{{post.creator.id}}/">{{ post.creator }}</a></li>
+        <li><a href="/post/{{post.id}}/">{{ post.created_at }}</a></li>
+      </ul>
+</div>
+{% endblock %}
