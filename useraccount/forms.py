@@ -4,16 +4,15 @@ from useraccount.models import UserAccount
 from json.decoder import JSONDecodeError
 
 class LoginForm(forms.Form):
-    email = forms.CharField(max_length=254)
+    email = forms.EmailField()
     # this widget/plugin '.PasswordInput' hides the chars with '****'
     password = forms.CharField(widget=forms.PasswordInput)
 
 class SignupForm(forms.Form):
-    email = forms.CharField(max_length=254)
+    email = forms.EmailField()
     # this widget/plugin '.PasswordInput' hides the chars with '****'
     password = forms.CharField(widget=forms.PasswordInput)
     confirm_password = forms.CharField(widget=forms.PasswordInput)
-    
     def clean(self):
         if self.cleaned_data['password'] != self.cleaned_data['confirm_password']:
             self.add_error('password','')
@@ -29,7 +28,6 @@ class AddPersonForm(forms.ModelForm):
             'last_name',
             'birth_date',
         ]
-    
     birth_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}))
 
 class EditPersonForm(forms.ModelForm):
@@ -53,7 +51,7 @@ class EditPersonForm(forms.ModelForm):
 
 class EditUserForm(forms.Form):
     
-    email = forms.CharField(max_length=254, required=True)
+    email = forms.EmailField()
     # this widget/plugin '.PasswordInput' hides the chars with '****'
     password = forms.CharField(widget=forms.PasswordInput, required=False)
     confirm_password = forms.CharField(widget=forms.PasswordInput, required=False)

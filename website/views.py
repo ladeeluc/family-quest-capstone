@@ -90,6 +90,9 @@ class SignupPerson(GenericFormView):
                 last_name=form_data['last_name'],
                 birth_date=form_data['birth_date'],
             )
+            if person.is_claimed:
+                raw_form.add_error(None, 'Your identity already exists in our database and has already been claimed by another user. Please contact an administrator if this is unexpected.')
+                return
         except Person.DoesNotExist:
             person = Person.objects.create(**form_data)
         
