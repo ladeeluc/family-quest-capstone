@@ -1,5 +1,4 @@
-
-from django.shortcuts import render, redirect
+from django.shortcuts import render, HttpResponseRedirect, reverse, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -8,16 +7,12 @@ from useraccount.models import UserAccount
 
 from django.views.generic import View
 from website.base_views import GenericFormView
-from django.shortcuts import render
 
-
-from django.views import View
 
 
 class Home(LoginRequiredMixin, View):
 
     def get(self, request):
-        # raise Exception()
         return render(request, 'index.html')
 
 class Logout(View):
@@ -52,5 +47,3 @@ class Signup(GenericFormView):
         if user:
             login(request,user)
             return redirect('home')
-
-# Create your views here.
