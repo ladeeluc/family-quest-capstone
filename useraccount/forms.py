@@ -51,7 +51,7 @@ class EditPersonForm(forms.ModelForm):
 
 class EditUserForm(forms.Form):
     
-    email = forms.CharField(max_length=254, required=True)
+    email = forms.EmailField()
     # this widget/plugin '.PasswordInput' hides the chars with '****'
     password = forms.CharField(widget=forms.PasswordInput, required=False)
     confirm_password = forms.CharField(widget=forms.PasswordInput, required=False)
