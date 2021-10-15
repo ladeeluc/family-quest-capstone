@@ -104,7 +104,7 @@ class SignupPerson(LoginRequiredMixin, GenericFormView):
         
         return redirect('home')
 
-class PersonDetail(View):
+class PersonDetail(LoginRequiredMixin, View):
     def get(self, request, person_id):
         try:
             person = Person.objects.get(id=person_id)
@@ -203,7 +203,39 @@ class PersonAddParent(PersonEdit):
         person = Person.objects.get(id=person_id) # exists by _precheck
         Relation.objects.create(source=person, target=form_data['person'], is_upward=True)
         return redirect('person_detail', person_id)
+
+class FamilyCircleAddPerson(LoginRequiredMixin, GenericFormView):
+    FormClass = AddPersonForm
+    template_text = {"header":"Create Person", "submit":"All Done"}
+
+    def _precheck(self, request, familycircle_id, *args, **kwargs,):
+        try:
+            circle = FamilyCircle.objects.get(id=familycircle_id)
+        except FamilyCircle.DoesNotExist:
+            return redirect('home')
+
+        if request.user.person is None or request.user.person.family_circles is None:
+            return redirect('home')
+
+    def _handle_submission(self, request, form_data, raw_form, familycircle_id):
+        circle = FamilyCircle.objects.get(id=familycircle_id) # covered by _precheck
+        # Find a matching person, or make a new one
+        try:
+            person = Person.objects.get(
+                first_name=form_data['first_name'],
+                middle_name=form_data['middle_name'],
+                last_name=form_data['last_name'],
+                birth_date=form_data['birth_date'],
+            )
+        except Person.DoesNotExist:
+            person = Person.objects.create(**form_data)
         
+        if person not in circle.members.all():
+            circle.members.add(person)
+            return redirect('person_detail', person.id)
+        else:
+            raw_form.add_error(None, 'This person is already in the family circle')
+
 class UserEdit(LoginRequiredMixin, PrefilledFormView):
     FormClass = EditUserForm
     template_text = {"header":"Settings", "submit":"Save"}

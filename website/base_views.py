@@ -70,6 +70,10 @@ class GenericFormView(View):
         return render(request, self.template_name, {"form": form, "template_text": self.template_text})
 
     def post(self, request, *args, **kwargs):
+        precheck_result = self._precheck(request, *args, **kwargs)
+        if precheck_result is not None:
+            return precheck_result
+
         form = self.FormClass(request.POST, request.FILES)
         if form.is_valid():
             res = self._handle_submission(request, form.cleaned_data, form, *args, **kwargs)
