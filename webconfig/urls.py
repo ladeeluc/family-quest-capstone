@@ -28,6 +28,10 @@ from useraccount.views import (
     UserSearchEndpoint,
 )
 
+from familystructure.views import (
+    PersonSearchEndpoint,
+)
+
 urlpatterns = [
     # Endpoints
     path('api/chats/', ChatsEndpoint.as_view()),
@@ -35,6 +39,7 @@ urlpatterns = [
     path('api/notifs/', NotifsEndpoint.as_view()),
     path('api/notifs/<slug:notif_slug>/', NotifsDetailEndpoint.as_view()),
     path('api/user/search/', UserSearchEndpoint.as_view()),
+    path('api/person/search/', PersonSearchEndpoint.as_view()),
     
     # Views
     path('', frontend.Home.as_view(), name='home'),
