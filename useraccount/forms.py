@@ -47,7 +47,7 @@ class EditPersonForm(forms.ModelForm):
         ]
     
     birth_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}))
-    death_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}))
+    death_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}), required=False)
 
 class EditUserForm(forms.Form):
     
