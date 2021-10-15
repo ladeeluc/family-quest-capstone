@@ -215,7 +215,7 @@ class SingleChat(LoginRequiredMixin, View):
             }
         return render(request, 'chat.html', context)
 
-class CreatePost(View):
+class CreatePost(PersonRequiredMixin, View):
     
     def get(self, request, circle_id):
         return self._render_template(request, circle_id, None, "text")
