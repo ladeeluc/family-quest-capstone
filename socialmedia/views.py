@@ -4,6 +4,7 @@ from django.shortcuts import redirect,render, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from website.base_views import BaseEndpoint, GenericFormView
 from socialmedia.forms import AddPostForm
+from familystructure.models import Person, Relation ,FamilyCircle
 from socialmedia.models import (
     Chat,
     Message,
@@ -139,6 +140,16 @@ class PostDetailView(LoginRequiredMixin, View):# family circle same
         except Post.DoesNotExist:
             return redirect('home')    
 
+class FamilyCirclePosts(LoginRequiredMixin, View):
+    """shows a list of post titles made under the family circle"""
+    def get(self, request):
+        try:
+            target_user = FamilyCircle.objects.order_by('members')
+            # family_posts = Post.objects.filter(family_circle_id=target_user)
+            return render(request,'family_posts.html', 
+            {'target_user': target_user})
+        except Person.DoesNotExist:
+            return redirect('home')
 
 
 

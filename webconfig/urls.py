@@ -26,7 +26,8 @@ from socialmedia.views import (
     NotifsEndpoint,
     NotifsDetailEndpoint,
     CreatePostView,
-    PostDetailView
+    PostDetailView,
+    FamilyCirclePosts
 )
 
 urlpatterns = [
@@ -45,6 +46,8 @@ urlpatterns = [
     path('post/', CreatePostView.as_view(), name='post'),
     path('post/<int:post_id>/', PostDetailView.as_view(), name='post_view'),
     path('family_posts/', FamilyCirclePostView.as_view(), name='family_posts'),
-    path('family_members/', FamilyCircleListView.as_view(), name='family_members')
+    path('family_members/', FamilyCircleListView.as_view(), name='family_members'),
+    path('family_circle_posts/', FamilyCirclePosts.as_view(), name='family_circle_posts')
+    
 ]
 
