@@ -227,9 +227,11 @@ class Person(models.Model):
             me = []
         try:
             circles = self.family_circles.all()
-            users = [user for user in (circle.managers.all() for circle in circles)]
-            if me and me[0] not in users:
-                users = me + users
-            return users
+            managers = []
+            for circle in circles:
+                managers.extend(list(circle.managers.all()))
+            if me and me[0] not in managers:
+                managers = me + managers
+            return managers
         except AttributeError: # no family circles, just us (if possible)
             return me
