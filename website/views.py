@@ -208,3 +208,6 @@ class SingleChat(LoginRequiredMixin, View):
             "members":", ".join([str(m) for m in chat.members.exclude(id=request.user.id)]),
             }
         return render(request, 'chat.html', context)
+
+class CreatePost(GenericFormView):
+    pass
