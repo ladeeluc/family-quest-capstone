@@ -15,6 +15,7 @@ from socialmedia.models import (
 )
 #laura code
 class FamilyCirclePostView(LoginRequiredMixin, View):
+    '''renders all post for a family'''
     def get(self, request):
         try:
             posts = Post.objects.all()
@@ -23,13 +24,10 @@ class FamilyCirclePostView(LoginRequiredMixin, View):
             return redirect('home')
 
 class FamilyCircleListView(LoginRequiredMixin,View):
-     def get(self,request):
+    '''shows all people in one family'''
+    def get(self,request):
          try:
              family_members = Person.objects.all()
              return render(request, 'family_members.html', {'family_members':family_members})
          except Person.DoesNotExist:
              return redirect ('home')
-        
-
-
-
