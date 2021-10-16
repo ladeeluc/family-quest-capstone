@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 {% block body %}
-{{target_user}}
-{{family_posts}}
+{% for family_post in family_posts %}
+{% comment %} {% for post in posts %} {% endcomment %}
+<li><a href="/post/{{family_post.id}}">{{family_post}}</a></li>
+{% comment %} {% endfor %} {% endcomment %}
+{% endfor %}
 {% endblock body %}
+

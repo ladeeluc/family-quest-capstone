@@ -47,7 +47,7 @@ urlpatterns = [
     path('post/<int:post_id>/', PostDetailView.as_view(), name='post_view'),
     path('family_posts/', FamilyCirclePostView.as_view(), name='family_posts'),
     path('family_members/', FamilyCircleListView.as_view(), name='family_members'),
-    path('family_circle_posts/', FamilyCirclePosts.as_view(), name='family_circle_posts')
+    path('family_circle_posts/<int:family_post_id>/', FamilyCirclePosts.as_view(), name='family_circle_posts')
     
 ]
 

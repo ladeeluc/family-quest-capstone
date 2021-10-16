@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
 {% block body %}
-{{post}}
+<li>{{post.title}}</li>
+<li>{{post.content}}</li>
+<li>{{post.post_photo}}</li>
+<li>{{post.created_at}}</li>
+<li>{{post.author}}</li>
+<li>{{post.family_circle}}
 {% endblock body %}

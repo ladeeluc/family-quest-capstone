@@ -132,7 +132,8 @@ class CreatePostView(LoginRequiredMixin, GenericFormView):
         post = Post.objects.create(**form_data, author=request.user )
         return redirect('post_view', post.id)
 
-class PostDetailView(LoginRequiredMixin, View):# family circle same
+class PostDetailView(LoginRequiredMixin, View):
+    '''renders single post to page'''
     def get(self,request,post_id):
         try:
             post = Post.objects.get(id=post_id)
@@ -142,13 +143,13 @@ class PostDetailView(LoginRequiredMixin, View):# family circle same
 
 class FamilyCirclePosts(LoginRequiredMixin, View):
     """shows a list of post titles made under the family circle"""
-    def get(self, request):
+    def get(self, request,family_post_id):
         try:
-            target_user = FamilyCircle.objects.order_by('members')
-            # family_posts = Post.objects.filter(family_circle_id=target_user)
-            return render(request,'family_posts.html', 
-            {'target_user': target_user})
-        except Person.DoesNotExist:
+            target_family: FamilyCircle = FamilyCircle.objects.get(id = family_post_id)
+            family_posts: Post = Post.objects.filter(family_circle=target_family)
+            return render(request,'family_circle_posts.html', 
+            {'family_posts':family_posts, 'target_family': target_family})
+        except FamilyCircle.DoesNotExist:
             return redirect('home')
 
 
