@@ -199,6 +199,15 @@ class Person(models.Model):
         spouses = set(rel.target if rel.target != self else rel.source for rel in spouse_rels)
         return list(children | spouses)
 
+    def query_spouses(self) -> list:
+        """Get the spouses of this person"""
+        try:
+            spouse_rels = self.relations_in.filter(is_upward=False).union(self.relations_out.filter(is_upward=False))
+        except AttributeError:
+            spouse_rels = Relation.objects.none()
+        spouses = set(rel.target if rel.target != self else rel.source for rel in spouse_rels)
+        return list(spouses)
+
     def query_children(self) -> list:
         """Get the direct children of this person"""
         try:
