@@ -218,11 +218,15 @@ class FamilyCircleDetail(PersonRequiredMixin, View):
 
     def get(self, request, circle_id):
         circle = FamilyCircle.objects.get(id=circle_id)
+        if request.user.person not in circle.members.all():
+            return redirect('home')
         return render(request, 'circle_detail.html', {"circle":circle})
 
-class FamilyCircleManage(PersonRequiredMixin, View):
+class FamilyCircleManage(LoginRequiredMixin, View):
 
     def get(self, request, circle_id):
+        if request.user not in person.query_managers():
+            return redirect('home')
         circle = FamilyCircle.objects.get(id=circle_id)
         return render(request, 'circle_manage.html', {"circle":circle})
 
@@ -316,6 +320,8 @@ class SingleChat(LoginRequiredMixin, View):
 
     def get(self, request, chat_id):
         chat = Chat.objects.get(id=chat_id)
+        if request.user not in chat.members():
+            return redirect('home')
         context = {
             "chat":chat,
             "members":", ".join([str(m) for m in chat.members.exclude(id=request.user.id)]),
@@ -329,6 +335,8 @@ class CreatePost(PersonRequiredMixin, View):
     
     def _render_template(self, request, circle_id, form, post_type):
         circle = FamilyCircle.objects.get(id=circle_id)
+        if request.user.person not in circle.members.all():
+            return redirect('home')
         return render(request, 'create_post.html', {
             "text_form":form or TextPostForm() if post_type == "text" else TextPostForm(),
             "image_form":form or ImagePostForm() if post_type == "image" else ImagePostForm(),
@@ -360,6 +368,8 @@ class PostDetail(PersonRequiredMixin, View):
 
     def get(self, request, post_id):
         post = Post.objects.get(id=post_id)
+        if request.user.person not in post.family_circle.members.all():
+            return redirect('home')
         return render(request, 'post_detail.html', {
             "post":post
         })
