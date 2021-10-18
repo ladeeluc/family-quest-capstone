@@ -26,6 +26,8 @@ from socialmedia.forms import TextPostForm, ImagePostForm
 from socialmedia.models import Post
 from familystructure.models import FamilyCircle
 
+from familystructure.forms import CreateFamilyCircleForm
+
 class Home(LoginRequiredMixin, View):
 
     def get(self, request):
@@ -264,6 +266,21 @@ class FamilyCircleAddPerson(LoginRequiredMixin, GenericFormView):
             raw_form.add_error('middle_name', '')
             raw_form.add_error('last_name', '')
             raw_form.add_error('birth_date', '')
+
+class CreateFamilyCircle(PersonRequiredMixin, GenericFormView):
+    FormClass = CreateFamilyCircleForm
+    template_text = {"header":"Create a Family Circle", "submit":"Create"}
+
+    def _handle_submission(self, request, form_data, raw_form, *args, **kwargs):
+        family = FamilyCircle.objects.create(**form_data)
+
+        family.managers.add(
+            request.user
+        )
+        family.members.add(
+            request.user.person
+        )
+        return redirect('circle_detail', family.id)
 
 class UserEdit(LoginRequiredMixin, PrefilledFormView):
     FormClass = EditUserForm
