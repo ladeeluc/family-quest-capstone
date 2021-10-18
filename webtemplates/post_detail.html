@@ -1,20 +1,31 @@
 {% extends 'base.html' %}
 
 {% block body %}
+{% load django_bootstrap5 %}
 <div class="container-fluid">
     <h1>Family Circle Post Detail</h1>
     <hr>
+    <h2><i>Family Greetings, {{post.author.person|default:post.author.email}}</i></h2>
     <p>
-        (Signed in as {{user.email}})
-        {% if user.person.profile_photo %}
-            {% include 'generic_image.html' with photo=user.person.profile_photo style='width: 100px' class='example'%}
-        {% endif %}
+        {% include 'generic_image.html' with photo=post.author.person.profile_photo style='width: 100px' class='example'%}
+     <hr>   
     </p>
+        {% include 'generic_image.html' with photo=post.author.person.profile_photo style='width: 100px' class='example'%}
+        <form action="" method="post" enctype="multipart/form-data" class="mt-5">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+        <button type="submit" class="btn btn-primary mt-2">
+        ADD COMMENT
+    </button>
+  </form>
+
     <ul>
-        <li>{{ post.body|safe }}</li>
-        <img src="{{ header_image.url }}" style="width: 100px;">
-        <li><a href="/user/{{post.creator.id}}/">{{ post.creator }}</a></li>
-        <li><a href="/post/{{post.id}}/">{{ post.created_at }}</a></li>
-      </ul>
+        {% for comment in comments %}
+        <li>{{ comment.body }}</li>
+        <li><a href="/user/{{comment.author.id}}/">{{ comment.author }}</a></li>
+        <li><a href="/comment/{{comment.id}}/">{{ comment.created_at }}</a></li>
+        {% endfor %}
+    </ul>
 </div>
 {% endblock %}
+

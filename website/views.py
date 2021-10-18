@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 
-from useraccount.forms import EditUserForm, LoginForm, SignupForm, AddPersonForm, EditPersonForm, PostForm
+from useraccount.forms import EditUserForm, LoginForm, SignupForm, AddPersonForm, EditPersonForm
 from useraccount.models import UserAccount
 
 from familystructure.models import Person, Relation, FamilyCircle
