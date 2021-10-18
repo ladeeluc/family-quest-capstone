@@ -13,6 +13,9 @@
 .portrait img {
     height: 100%;
 }
+.overlay-header {
+    margin-top: -6rem;
+}
 /* custom sized spinners */
 .spinner-border-lg {
     width: 6rem;

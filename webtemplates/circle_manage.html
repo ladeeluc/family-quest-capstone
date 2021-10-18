@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block body %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/family_navigator.css' %}">
+<div class="container-md">
+    <h1 class="display-2 text-center mt-2 mb-5">{{circle.name}}</h1>
+    <div class="overlay-header float-end">
+        <a href="{% url 'circle_add_person' circle.id %}" class="btn btn-primary btn-lg float-end">Add Person</a>
+        <a href="{% url 'circle_detail' circle.id %}" class="btn btn-outline-secondary btn-lg float-end me-3">Back</a>
+    </div>
+    {% include 'person_list.html' with person_list=circle.query_detached_people label='Detached People' %}
+    {% include 'person_list.html' with person_list=circle.members.all label='All Members' %}
+</div>
+{% endblock %}

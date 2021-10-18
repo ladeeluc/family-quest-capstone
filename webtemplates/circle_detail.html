@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="container-md">
+    <h1 class="display-2 text-center mt-2 mb-5">{{circle.name}}</h1>
+    <div class="overlay-header float-end">
+        <a href="{% url 'create_post' circle.id %}" class="btn btn-primary btn-lg float-end">Create Post</a>
+        {% if request.user in circle.managers.all %}
+        <a href="{% url 'circle_manage' circle.id %}" class="btn btn-outline-secondary btn-lg float-end me-3">Manage</a>
+        {% endif %}
+    </div>
+    {% if circle.posts.count == 0 %}
+    <div class="d-flex justify-content-center">
+        <div class="card text-center mx-2" style="width: 25rem">
+            <div class="card-body">
+                <h5 class="card-title">Be the first to share</h5>
+                <p class="card-text">Nobody's posted anything yet... Would you like to be the first?</p>
+                <a href="{% url 'create_post' circle.id %}" class="btn btn-primary btn-lg">Create a Post</a>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="list-group">
+        {% for post in circle.posts.all %}
+        <a href="{% url 'post_detail' post.id %}" class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1"><span class="text-primary">{{post.author}}</span> - {{post.title}}</h5>
+            <small class="tz-localize">{{post.created_at.isoformat}}</small>
+            </div>
+            <p class="mb-1">{{post.content}}</p>
+            <small>{{post.comments.count}} Comments</small>
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

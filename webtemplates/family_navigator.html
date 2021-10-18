@@ -28,13 +28,13 @@
                     </div>
                     <div class="mt-2">
                         {% for circle in person.family_circles.all %}
-                        <span class="badge bg-secondary"><a href="TODO" class="text-reset text-decoration-none">{{circle.name}}</a></span>
+                        <span class="badge bg-secondary"><a href="{% url 'circle_detail' circle.id %}" class="text-reset text-decoration-none">{{circle.name}}</a></span>
                         {% endfor %}
                     </div>
                 </span>
             </div>
             <div class="mt-2">
-                <h3 class="display-6 text-center">Facts</h3>
+                <h3 class="display-6 mt-4">Facts</h3>
                 {% if person.facts %}
                 <ul>
                 {% for fact in person.facts %}
