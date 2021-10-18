@@ -124,8 +124,6 @@ class PersonEdit(PersonRequiredMixin, PrefilledFormView):
     template_text = {"header":"Edit Person", "submit":"Save"}
 
     def _precheck(self, request, person_id):
-        if not request.user.person:
-            return redirect('person_detail', person_id)
         try:
             person = Person.objects.get(id=person_id)
             if (request.user.person != person and request.user not in person.query_managers()):
@@ -225,9 +223,9 @@ class FamilyCircleDetail(PersonRequiredMixin, View):
 class FamilyCircleManage(LoginRequiredMixin, View):
 
     def get(self, request, circle_id):
-        if request.user not in person.query_managers():
-            return redirect('home')
         circle = FamilyCircle.objects.get(id=circle_id)
+        if request.user not in circle.managers.all():
+            return redirect('home')
         return render(request, 'circle_manage.html', {"circle":circle})
 
 class FamilyCircleAddPerson(LoginRequiredMixin, GenericFormView):
@@ -320,7 +318,7 @@ class SingleChat(LoginRequiredMixin, View):
 
     def get(self, request, chat_id):
         chat = Chat.objects.get(id=chat_id)
-        if request.user not in chat.members():
+        if request.user not in chat.members.all():
             return redirect('home')
         context = {
             "chat":chat,
