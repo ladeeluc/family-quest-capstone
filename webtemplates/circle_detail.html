@@ -4,7 +4,7 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/post_item.css' %}">
 <div class="container-md">
-    <h1 class="display-2 text-center mt-2 mb-5">{{circle.name}}</h1>
+    <h1 class="display-2 text-center mt-2 mb-5 overflow-hidden" style="margin-right: 16rem">{{circle.name}}</h1>
     <div class="overlay-header">
         <a href="{% url 'circle_manage' circle.id %}" class="btn btn-outline-secondary btn-lg me-0 me-lg-2">Manage</a>
         {% if request.user in circle.managers.all %}
