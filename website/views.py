@@ -14,9 +14,12 @@ from familystructure.models import Person, Relation, FamilyCircle
 
 from website.base_views import GenericFormView, PrefilledFormView
 
-from socialmedia.models import Chat
+from socialmedia.models import Chat, Post, Comment, CommentNotification
+from socialmedia.forms import AddCommentForm
 
 from functools import reduce
+
+
 
 class Home(LoginRequiredMixin, View):
 
@@ -105,6 +108,7 @@ class PersonDetail(View):
     def get(self, request, person_id):
         try:
             person = Person.objects.get(id=person_id)
+            person.facts = person.facts.split("\n")
             return render(request, 'person_detail.html', {
                 'person': person,
             })
@@ -161,17 +165,43 @@ class UserEdit(PrefilledFormView):
             request.user.set_password(form_data['password'])
         request.user.save()
 
-class FamilyCircleDetail(LoginRequiredMixin, View):
+class PostDetail(LoginRequiredMixin, View):
 
-    def get(self, request, circle_id):
-        # Get all the posts of a family circle
-        # Get the family circle with the circle_id
-        # Its posts are under family_circle.posts.all()
-        # It would be nice to order them by the creation date :)
-        template_name = "fam_cir_post_detail.html"
-        post = UserAccount.objects.filter(id=circle_id).first()
-        context = {"fam_cir_post": post}
-        return render(request, template_name, context)
+    def get(self, request, post_id):
+        try:
+            template_name = "post_detail.html"
+            #Get post from post id
+            post = Post.objects.get(id=post_id)
+           #Get comments from post
+            context = {
+                'post': post,
+                'comments': post.comments.all(),
+                'form': AddCommentForm()
+            }
+            return render(request, template_name, context)
+        except Post.DoesNotExist:
+            return redirect('home')
+
+    def post(self, request, post_id):
+        try:
+            template_name = "post_detail.html"
+            #Get post from post id
+            post = Post.objects.get(id=post_id)
+            form = AddCommentForm(request.POST)
+            if form.is_valid():
+                comment = Comment.objects.create(
+                    **form.cleaned_data,
+                    author=request.user,
+                    commented_on=post,
+                )
+                CommentNotification.objects.create(
+                    target_user=post.author,
+                    target_comment=comment
+                )
+
+            return redirect('post_detail', post_id)
+        except Post.DoesNotExist:
+            return redirect('home')
 
 class AllChats(LoginRequiredMixin, View):
     
