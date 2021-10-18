@@ -1,5 +1,6 @@
 
 from django import forms
+from django.db.models import manager
 from django.db.models.query_utils import Q
 from django.views.generic import View
 from django.shortcuts import render, redirect, HttpResponseRedirect, reverse
@@ -16,7 +17,6 @@ from familystructure.models import Person, Relation, FamilyCircle
 from django.views.generic import View
 
 from website.base_views import GenericFormView, PrefilledFormView
-
 from socialmedia.models import Chat
 
 from functools import reduce
@@ -25,6 +25,7 @@ from familystructure.mixins import PersonRequiredMixin
 from socialmedia.forms import TextPostForm, ImagePostForm
 from socialmedia.models import Post
 from familystructure.models import FamilyCircle
+from familystructure.forms import AddFamilyForm
 
 class Home(LoginRequiredMixin, View):
 
@@ -347,3 +348,19 @@ class FamilyNavigator(PersonRequiredMixin, View):
             "person":person,
             "posts":[]
         })
+
+class CreateFamilyCircle(GenericFormView):
+    FormClass = AddFamilyForm
+    template_text = {"header":"Create a family circle", "submit":"Create"}
+
+    def _handle_submission(self, request, form_data, raw_form, *args, **kwargs):
+        family = FamilyCircle.objects.create(**form_data)
+
+        family.managers.add(
+            request.user
+        )
+        family.members.add(
+            request.user.person
+        )
+        return redirect('home')
+

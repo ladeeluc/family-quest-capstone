@@ -258,3 +258,4 @@ class Message(models.Model):
             'sent_at': self.sent_at,
             'author': self.author.json_serialize(),
         }
+
