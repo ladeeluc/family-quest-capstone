@@ -26,7 +26,7 @@ from socialmedia.views import (
     NotifsEndpoint,
     NotifsDetailEndpoint,
     CreatePostView,
-    PostDetailView
+    PostDetailView,
 )
 
 urlpatterns = [
