@@ -1,3 +1,18 @@
+/* custom elements */
+.portrait {
+    width: 4em;
+    height: 4em;
+    border-radius: 100%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+.portrait-lg {
+    width: 12em;
+    height: 12em;
+}
+.portrait img {
+    height: 100%;
+}
 /* custom sized spinners */
 .spinner-border-lg {
     width: 6rem;

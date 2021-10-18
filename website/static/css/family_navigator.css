@@ -1,0 +1,57 @@
+.person-list {
+    position: relative;
+    flex-shrink: 1;
+    flex-grow: 1;
+    flex-basis: 0px;
+    max-height: 11em;
+    min-height: 10em;
+    height: calc(20vh - 1.5em);
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    padding-left: 2em !important;
+    
+}
+.person-list > .card {
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: inline-block;
+    box-sizing: border-box;
+    width: 14em;
+}
+.person-list-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    height: 100%;
+    text-align: center;
+    
+}
+.btn-add {
+    width: 4em;
+    height: 4em;
+    box-sizing: border-box;
+    display: inline-block;
+    padding: 3em;
+    margin: 1em;
+    border: 1px solid gray;
+    border-radius: 100%;
+    position: absolute;
+}
+.btn-add:hover {
+    opacity: 0.75;
+}
+.btn-add::after {
+    width: 100%;
+    height: 100%;
+    content: '+';
+    position: absolute;
+    font-family: math;
+    font-size: 4em;
+    top: 0;
+    left: 0;
+    text-align: center;
+}

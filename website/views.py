@@ -26,9 +26,6 @@ from socialmedia.forms import TextPostForm, ImagePostForm
 from socialmedia.models import Post
 from familystructure.models import FamilyCircle
 
-# TEMP IMPORT
-from django.shortcuts import HttpResponse
-
 class Home(LoginRequiredMixin, View):
 
     def get(self, request):
@@ -342,3 +339,11 @@ class CreatePost(PersonRequiredMixin, View):
             return redirect(reverse('post_detail', args=[post.id]))
         return self._render_template(request, circle_id, form, post_type)
         
+class FamilyNavigator(PersonRequiredMixin, View):
+    
+    def get(self, request, person_id):
+        person = Person.objects.get(id=person_id)
+        return render(request, 'family_navigator.html', {
+            "person":person,
+            "posts":[]
+        })
