@@ -14,15 +14,3 @@ body {
     overflow-x: hidden;
     /* min-height: 0; */
 }
-
-.portrait {
-    width: 4em;
-    height: 4em;
-    border-radius: 100%;
-    overflow: hidden;
-    flex-shrink: 0;
-}
-.portrait img {
-    width: 100%;
-    height: 100%;
-}

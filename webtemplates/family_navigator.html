@@ -1,14 +1,16 @@
 {% extends 'base.html' %}
 
+
 {% block body %}
 
-{% url 'person_edit' person.id as edit %}
 {% url 'person_add_spouse' person.id as add_spouse %}
 {% url 'person_add_parent' person.id as add_parent %}
 
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/family_navigator.css' %}">
 <div class="container-fluid">
     <div class="row">
-        <div class="col-6">
+        <div class="col-12 col-lg-7 col-xl-5 d-flex flex-column">
             <div class="d-flex mt-4">
                 <div class="portrait portrait-lg me-3">
                     {% include 'generic_image.html' with photo=person.profile_photo %}
@@ -17,9 +19,9 @@
                     <h2>{{person}}</h2>
                     <em class="fs-4">{{person.tagline}}</em>
                     <div class="fs-5">
-                        {{person.birth_date|date:'l, F j, Y'}} - 
+                        {{person.birth_date|date:'F j, Y'}} - 
                         {% if person.death_date %}
-                        {{person.death_date|date:'l, F j, Y'}}
+                        {{person.death_date|date:'F j, Y'}}
                         {% else %}
                         Present
                         {% endif %}
@@ -29,19 +31,12 @@
                         <span class="badge bg-secondary"><a href="TODO" class="text-reset text-decoration-none">{{circle.name}}</a></span>
                         {% endfor %}
                     </div>
-                    {% if request.user in person.query_managers %}
-                        <div class="mt-2">
-                            <a class="btn btn-outline-primary" href="{{edit}}">Edit</a>
-                            <a class="btn btn-outline-secondary" href="{{add_spouse}}">Add Spouse</a>
-                            <a class="btn btn-outline-secondary" href="{{add_parent}}">Add Parent</a>
-                        </div>
-                    {% endif %}
                 </span>
             </div>
-            <div>
-                <h3 class="display-6 ps-5">Facts</h3>
+            <div class="mt-2">
+                <h3 class="display-6 text-center">Facts</h3>
                 {% if person.facts %}
-                <ul class="fs-5">
+                <ul>
                 {% for fact in person.facts %}
                 <li>{{fact}}</li>
                 {% endfor %}
@@ -50,14 +45,19 @@
                 <p>No facts yet... edit this person's profile to add some!</p>
                 {% endif %}
             </div>
+            <div class="d-flex flex-grow-1 align-items-end mt-5">
+                <div class="d-grid flex-grow-1 mx-4">
+                    <a href="{% url 'person_detail' person.id %}" class="btn btn-primary block">Go to Profile</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-5 col-xl-7">
+            {% include 'person_list.html' with person_list=person.query_grandparents label='Grandparents' %}
+            {% include 'person_list.html' with person_list=person.query_parents label='Parents' add_href=add_parent %}
+            {% include 'person_list.html' with person_list=person.query_generation label='Generation' add_href=add_spouse %}
+            {% include 'person_list.html' with person_list=person.query_children label='Children' %}
+            {% include 'person_list.html' with person_list=person.query_grandchildren label='Grandchildren' %}
         </div>
     </div>
-    <div class="col-6">
-        <ul>
-        {% for post in person.useraccount.posts_made.all %}
-        <li>{{post.title}}</li>
-        {% endfor %}
-        </ul>
-    </div>
 </div>
-{% endblock body %}
+{% endblock %}

@@ -1,0 +1,19 @@
+<div class="person-list pretty-scrollbar my-2 p-2">
+    <div class="person-list-label text-muted lead">
+        {{label}}
+    </div>
+    {% for p in person_list %}
+    <a href="{% url 'family_navigator' p.id %}" class="card h-100 mx-1 list-group-item-action text-decoration-hover-only">
+        <div class="card-body text-center pt-1">
+            <div class="portrait d-inline-block">
+                {% include 'generic_image.html' with photo=p.profile_photo %}
+            </div>
+            <h5 class="card-title text-ellipsis">{{p.first_name}} {{p.last_name}}</h5>
+            <p class="card-text text-ellipsis"><em>{{p.tagline}}</em></p>
+        </div>
+    </a>
+    {% endfor %}
+    {% if request.user in person.query_managers and add_href %}
+        <a class="btn-add text-muted text-decoration-none" href="{{add_href}}"></a>
+    {% endif %}
+</div>
