@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
 
 {% block body %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/post_item.css' %}">
 <div class="container-md">
     <h1 class="display-2 text-center mt-2 mb-5">{{circle.name}}</h1>
-    <div class="overlay-header float-end">
-        <a href="{% url 'create_post' circle.id %}" class="btn btn-primary btn-lg float-end">Create Post</a>
+    <div class="overlay-header">
+        <a href="{% url 'circle_manage' circle.id %}" class="btn btn-outline-secondary btn-lg me-0 me-lg-2">Manage</a>
         {% if request.user in circle.managers.all %}
-        <a href="{% url 'circle_manage' circle.id %}" class="btn btn-outline-secondary btn-lg float-end me-3">Manage</a>
+        <a href="{% url 'create_post' circle.id %}" class="btn btn-primary btn-lg">Create Post</a>
         {% endif %}
     </div>
     {% if circle.posts.count == 0 %}
@@ -20,14 +22,21 @@
         </div>
     </div>
     {% else %}
-    <div class="list-group">
-        {% for post in circle.posts.all %}
+    <div class="list-group mb-5">
+        {% for post in circle.posts.all reversed %}
         <a href="{% url 'post_detail' post.id %}" class="list-group-item list-group-item-action">
             <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1"><span class="text-primary">{{post.author}}</span> - {{post.title}}</h5>
+            <h5 class="mb-1 text-ellipsis"><span class="text-primary">{{post.author}}</span> - {{post.title}}</h5>
             <small class="tz-localize">{{post.created_at.isoformat}}</small>
             </div>
-            <p class="mb-1">{{post.content}}</p>
+            <p class="mb-1 post-content">
+                {% if post.content %}
+                {{post.content}}
+                {% endif %}
+                {% if post.post_photo %}
+                    <img src="/static/uploads/{{post.post_photo}}">
+                {% endif %}
+            </p>
             <small>{{post.comments.count}} Comments</small>
         </a>
         {% endfor %}

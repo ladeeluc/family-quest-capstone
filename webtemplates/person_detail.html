@@ -2,6 +2,8 @@
 
 {% block body %}
 
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/post_item.css' %}">
 <div class="container-fluid">
     <div class="row">
         <div class="col-12 col-lg-6">
@@ -48,14 +50,21 @@
         </div>
         <div class="col-12 col-lg-6">
             <h2 class="mt-4">Recent Posts</h2>
-            <div class="list-group">
-                {% for post in person.useraccount.posts_made.all %}
+            <div class="list-group mb-5">
+                {% for post in person.useraccount.posts_made.all reversed %}
                 <a href="{% url 'post_detail' post.id %}" class="list-group-item list-group-item-action">
                     <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">{{post.title}}</h5>
+                    <h5 class="mb-1 text-ellipsis">{{post.title}}</h5>
                     <small class="tz-localize">{{post.created_at.isoformat}}</small>
                     </div>
-                    <p class="mb-1">{{post.content}}</p>
+                    <p class="mb-1 post-content">
+                        {% if post.content %}
+                        {{post.content}}
+                        {% endif %}
+                        {% if post.post_photo %}
+                            <img src="/static/uploads/{{post.post_photo}}">
+                        {% endif %}
+                    </p>
                     <small>{{post.comments.count}} Comments</small>
                 </a>
                 {% endfor %}
