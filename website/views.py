@@ -26,6 +26,8 @@ from socialmedia.forms import TextPostForm, ImagePostForm
 from socialmedia.models import Post
 from familystructure.models import FamilyCircle
 
+from familystructure.forms import CreateFamilyCircleForm
+
 class Home(LoginRequiredMixin, View):
 
     def get(self, request):
@@ -124,8 +126,6 @@ class PersonEdit(PersonRequiredMixin, PrefilledFormView):
     template_text = {"header":"Edit Person", "submit":"Save"}
 
     def _precheck(self, request, person_id):
-        if not request.user.person:
-            return redirect('person_detail', person_id)
         try:
             person = Person.objects.get(id=person_id)
             if (request.user.person != person and request.user not in person.query_managers()):
@@ -179,7 +179,7 @@ class PersonAddSpouse(PersonEdit):
     def _handle_submission(self, request, form_data, raw_form, person_id):
         person = Person.objects.get(id=person_id) # exists by _precheck
         Relation.objects.create(source=person, target=form_data['person'], is_upward=False)
-        return redirect('person_detail', person_id)
+        return redirect('family_navigator', person_id)
 
 class PersonAddParent(PersonEdit):
     FormClass = ChooseRelatedPersonForm
@@ -207,7 +207,28 @@ class PersonAddParent(PersonEdit):
     def _handle_submission(self, request, form_data, raw_form, person_id):
         person = Person.objects.get(id=person_id) # exists by _precheck
         Relation.objects.create(source=person, target=form_data['person'], is_upward=True)
-        return redirect('person_detail', person_id)
+        return redirect('family_navigator', person_id)
+
+class FamilyCircles(PersonRequiredMixin, View):
+
+    def get(self, request):
+        return render(request, 'family_circles.html')
+
+class FamilyCircleDetail(PersonRequiredMixin, View):
+
+    def get(self, request, circle_id):
+        circle = FamilyCircle.objects.get(id=circle_id)
+        if request.user.person not in circle.members.all():
+            return redirect('home')
+        return render(request, 'circle_detail.html', {"circle":circle})
+
+class FamilyCircleManage(LoginRequiredMixin, View):
+
+    def get(self, request, circle_id):
+        circle = FamilyCircle.objects.get(id=circle_id)
+        if request.user not in circle.managers.all():
+            return redirect('home')
+        return render(request, 'circle_manage.html', {"circle":circle})
 
 class FamilyCircleAddPerson(LoginRequiredMixin, GenericFormView):
     FormClass = AddPersonForm
@@ -238,13 +259,28 @@ class FamilyCircleAddPerson(LoginRequiredMixin, GenericFormView):
         
         if person not in circle.members.all():
             circle.members.add(person)
-            return redirect('person_detail', person.id)
+            return redirect('circle_manage', circle_id)
         else:
             raw_form.add_error(None, 'This person is already in the family circle')
             raw_form.add_error('first_name', '')
             raw_form.add_error('middle_name', '')
             raw_form.add_error('last_name', '')
             raw_form.add_error('birth_date', '')
+
+class CreateFamilyCircle(PersonRequiredMixin, GenericFormView):
+    FormClass = CreateFamilyCircleForm
+    template_text = {"header":"Create a Family Circle", "submit":"Create"}
+
+    def _handle_submission(self, request, form_data, raw_form, *args, **kwargs):
+        family = FamilyCircle.objects.create(**form_data)
+
+        family.managers.add(
+            request.user
+        )
+        family.members.add(
+            request.user.person
+        )
+        return redirect('circle_detail', family.id)
 
 class UserEdit(LoginRequiredMixin, PrefilledFormView):
     FormClass = EditUserForm
@@ -299,6 +335,8 @@ class SingleChat(LoginRequiredMixin, View):
 
     def get(self, request, chat_id):
         chat = Chat.objects.get(id=chat_id)
+        if request.user not in chat.members.all():
+            return redirect('home')
         context = {
             "chat":chat,
             "members":", ".join([str(m) for m in chat.members.exclude(id=request.user.id)]),
@@ -312,6 +350,8 @@ class CreatePost(PersonRequiredMixin, View):
     
     def _render_template(self, request, circle_id, form, post_type):
         circle = FamilyCircle.objects.get(id=circle_id)
+        if request.user.person not in circle.members.all():
+            return redirect('home')
         return render(request, 'create_post.html', {
             "text_form":form or TextPostForm() if post_type == "text" else TextPostForm(),
             "image_form":form or ImagePostForm() if post_type == "image" else ImagePostForm(),
@@ -339,11 +379,20 @@ class CreatePost(PersonRequiredMixin, View):
             return redirect(reverse('post_detail', args=[post.id]))
         return self._render_template(request, circle_id, form, post_type)
         
+class PostDetail(PersonRequiredMixin, View):
+
+    def get(self, request, post_id):
+        post = Post.objects.get(id=post_id)
+        if request.user.person not in post.family_circle.members.all():
+            return redirect('home')
+        return render(request, 'post_detail.html', {
+            "post":post
+        })
+
 class FamilyNavigator(PersonRequiredMixin, View):
     
     def get(self, request, person_id):
         person = Person.objects.get(id=person_id)
         return render(request, 'family_navigator.html', {
             "person":person,
-            "posts":[]
         })

@@ -2,13 +2,11 @@
 
 {% block body %}
 
-{% url 'person_edit' person.id as edit %}
-{% url 'person_add_spouse' person.id as add_spouse %}
-{% url 'person_add_parent' person.id as add_parent %}
-
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/post_item.css' %}">
 <div class="container-fluid">
     <div class="row">
-        <div class="col-6">
+        <div class="col-12 col-lg-6">
             <div class="d-flex mt-4">
                 <div class="portrait portrait-lg me-3">
                     {% include 'generic_image.html' with photo=person.profile_photo %}
@@ -26,20 +24,19 @@
                     </div>
                     <div class="mt-2">
                         {% for circle in person.family_circles.all %}
-                        <span class="badge bg-secondary"><a href="TODO" class="text-reset text-decoration-none">{{circle.name}}</a></span>
+                        <span class="badge bg-secondary"><a href="{% url 'circle_detail' circle.id %}" class="text-reset text-decoration-none">{{circle.name}}</a></span>
                         {% endfor %}
                     </div>
-                    {% if request.user in person.query_managers %}
-                        <div class="mt-2">
-                            <a class="btn btn-outline-primary" href="{{edit}}">Edit</a>
-                            <a class="btn btn-outline-secondary" href="{{add_spouse}}">Add Spouse</a>
-                            <a class="btn btn-outline-secondary" href="{{add_parent}}">Add Parent</a>
-                        </div>
-                    {% endif %}
+                    <div class="mt-2">
+                        {% if request.user in person.query_managers %}
+                        <a class="btn btn-outline-primary" href="{% url 'person_edit' person.id %}">Edit Profile</a>
+                        {% endif %}
+                        <a class="btn btn-outline-secondary" href="{% url 'family_navigator' person.id %}">Family Tree</a>
+                    </div>
                 </span>
             </div>
-            <div>
-                <h3 class="display-6 ps-5">Facts</h3>
+            <div class="mt-5">
+                <h3 class="display-6 mt-5">Facts</h3>
                 {% if person.facts %}
                 <ul class="fs-5">
                 {% for fact in person.facts %}
@@ -51,13 +48,28 @@
                 {% endif %}
             </div>
         </div>
-    </div>
-    <div class="col-6">
-        <ul>
-        {% for post in person.useraccount.posts_made.all %}
-        <li>{{post.title}}</li>
-        {% endfor %}
-        </ul>
+        <div class="col-12 col-lg-6">
+            <h2 class="mt-4">Recent Posts</h2>
+            <div class="list-group mb-5">
+                {% for post in person.useraccount.posts_made.all reversed %}
+                <a href="{% url 'post_detail' post.id %}" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1 text-ellipsis">{{post.title}}</h5>
+                    <small class="tz-localize">{{post.created_at.isoformat}}</small>
+                    </div>
+                    <p class="mb-1 post-content">
+                        {% if post.content %}
+                        {{post.content}}
+                        {% endif %}
+                        {% if post.post_photo %}
+                            <img src="/static/uploads/{{post.post_photo}}">
+                        {% endif %}
+                    </p>
+                    <small>{{post.comments.count}} Comments</small>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 </div>
 {% endblock body %}

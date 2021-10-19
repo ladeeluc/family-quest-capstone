@@ -81,6 +81,18 @@ a {
     :root {
         font-size: 0.8em;
     }
+    .overlay-header.btn {
+        margin-top: -6rem;
+    }
+    div.overlay-header {
+        margin-top: -2rem;
+        display: grid;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+    }
+    .overlay-header > * {
+        float: none!important;
+    }
 }
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
@@ -100,6 +112,14 @@ a {
 @media (min-width: 992px) {
     :root {
         font-size: 1em;
+    }
+    div.overlay-header {
+        float: right;
+        display: block;
+        margin-top: -6rem;
+    }
+    div.overlay-header > * {
+        float: right;
     }
 }
 

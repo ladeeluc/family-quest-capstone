@@ -5,7 +5,18 @@
 <link rel="stylesheet" href="{% static 'css/chats.css' %}">
 <div class="container-md">
     <h1 class="display-2 text-center mt-2 mb-5">Chats</h1>
-    <button class="btn btn-primary btn-lg float-end create-button" data-bs-toggle="modal" data-bs-target="#create-chat-modal">Create</button>
+    <button class="btn btn-primary btn-lg float-end overlay-header" data-bs-toggle="modal" data-bs-target="#create-chat-modal">Create</button>
+    {% if user.chats.count == 0 %}
+    <div class="d-flex justify-content-center">
+        <div class="card text-center mx-2" style="width: 25rem">
+            <div class="card-body">
+            <h5 class="card-title">Start the conversation</h5>
+            <p class="card-text">You don't have any chats yet, how lonely :(</p>
+            <button data-bs-toggle="modal" data-bs-target="#create-chat-modal" class="btn btn-primary btn-lg">Create a Chat</button>
+            </div>
+        </div>
+    </div>
+    {% endif %}
     <div class="chats-list list-group mb-5">
     </div>
 </div>
