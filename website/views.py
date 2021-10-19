@@ -175,6 +175,7 @@ class PersonAddSpouse(PersonEdit):
         )
         form = self.FormClass()
         form.fields['person'].queryset = choices
+        self.template_text['header'] = f"Add Spouse to {person}"
         return form
         
     def _handle_submission(self, request, form_data, raw_form, person_id):
@@ -203,6 +204,7 @@ class PersonAddParent(PersonEdit):
         )
         form = self.FormClass()
         form.fields['person'].queryset = choices
+        self.template_text['header'] = f"Add Parent to {person}"
         return form
         
     def _handle_submission(self, request, form_data, raw_form, person_id):
