@@ -197,7 +197,7 @@ class Person(models.Model):
         except AttributeError:
             spouse_rels = Relation.objects.none()
         spouses = set(rel.target if rel.target != self else rel.source for rel in spouse_rels)
-        return list(children | spouses)
+        return list(children | spouses | {self})
 
     def query_spouses(self) -> list:
         """Get the spouses of this person"""
