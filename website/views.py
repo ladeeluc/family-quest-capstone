@@ -108,7 +108,6 @@ class PersonDetail(View):
     def get(self, request, person_id):
         try:
             person = Person.objects.get(id=person_id)
-            person.facts = person.facts.split("\n")
             return render(request, 'person_detail.html', {
                 'person': person,
             })

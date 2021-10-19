@@ -2,10 +2,11 @@
 
 {% block body %}
 {% load django_bootstrap5 %}
-<div class="container-fluid">
-    <h1>Family Circle Post Detail</h1>
-    <hr>
-    <h2><i>Family Greetings, {{post.author.person|default:post.author.email}}</i></h2>
+<div class="container-fluid px-lg-5">
+    <h1 class="mt-3">{{post.title}}</h1>
+    <span class="text-muted fs-4">
+        Posted by <a class="text-decoration-hover-only" href="{% url 'person_detail' post.author.person.id %}">{{post.author.person}}</a>
+    </span>
     <p>
         {% include 'generic_image.html' with photo=post.author.person.profile_photo style='width: 100px' class='example'%}
      <hr>   
@@ -22,8 +23,9 @@
     <ul>
         {% for comment in comments %}
         <li>{{ comment.body }}</li>
-        <li><a href="/user/{{comment.author.id}}/">{{ comment.author }}</a></li>
-        <li><a href="/comment/{{comment.id}}/">{{ comment.created_at }}</a></li>
+        
+        <li><a href="{% url 'user_detail' comment.author.id %}">{{ comment.author }}</a></li>
+        <li>{{ comment.created_at }}</li>
         {% endfor %}
     </ul>
 </div>
