@@ -54,10 +54,10 @@
                 {% for post in person.useraccount.posts_made.all reversed %}
                 <a href="{% url 'post_detail' post.id %}" class="list-group-item list-group-item-action">
                     <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1 text-ellipsis">{{post.title}}</h5>
-                    <small class="tz-localize">{{post.created_at.isoformat}}</small>
+                    <h5 class="mb-4 text-ellipsis mt-2">{{post.title}}</h5>
+                    <small class="text-nowrap tz-localize">{{post.created_at.isoformat}}</small>
                     </div>
-                    <p class="mb-1 post-content">
+                    <p class="mb-4 post-content">
                         {% if post.content %}
                         {{post.content}}
                         {% endif %}
