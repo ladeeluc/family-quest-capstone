@@ -2,8 +2,12 @@
 
 {% block body %}
 
+{% url 'person_add_spouse' person.id as add_spouse %}
+{% url 'person_add_parent' person.id as add_parent %}
+
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/post_item.css' %}">
+<link rel="stylesheet" href="{% static 'css/family_navigator.css' %}">
 <div class="container-fluid">
     <div class="row">
         <div class="col-12 col-lg-6">
@@ -46,6 +50,10 @@
                 {% else %}
                 <p>No facts yet... edit this person's profile to add some!</p>
                 {% endif %}
+            </div>
+            <div>
+                {% include 'person_list.html' with person_list=person.query_parents label='Parents' add_href=add_parent %}
+                {% include 'person_list.html' with person_list=person.query_spouses label='Spouses' add_href=add_spouse %}
             </div>
         </div>
         <div class="col-12 col-lg-6">

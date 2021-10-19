@@ -4,11 +4,11 @@
     </div>
     {% for p in person_list %}
     <a href="{% url 'family_navigator' p.id %}" class="card h-100 mx-1 list-group-item-action text-decoration-hover-only">
-        <div class="card-body text-center pt-1">
+        <div class="card-body text-center py-2">
             <div class="portrait d-inline-block">
                 {% include 'generic_image.html' with photo=p.profile_photo %}
             </div>
-            <h5 class="card-title text-ellipsis">{{p.first_name}} {{p.last_name}}</h5>
+            <h5 class="card-title text-ellipsis mb-0">{{p.first_name}} {{p.last_name}}</h5>
             <p class="card-text text-ellipsis"><em>{{p.tagline}}</em></p>
         </div>
     </a>
