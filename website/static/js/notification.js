@@ -78,8 +78,11 @@ class NotificationWidget {
         let list = document.createElement("div");
         list.classList.add("list-group");
         for (let notif of this.notifications) {
-            let elm = document.createElement("a");
-            elm.href = notif.url;
+            let elm = document.createElement("button");
+            elm.onclick = async (event) => {
+                await this.dismissNotification(notif.slug);
+                window.location.href = notif.url;
+            }
             elm.classList.add("list-group-item", "list-group-item-action");
             let typeToStr = {
                 "comment":"commented on your post",
