@@ -244,7 +244,10 @@ class FamilyCircleAddPerson(LoginRequiredMixin, GenericFormView):
         except FamilyCircle.DoesNotExist:
             return redirect('home')
 
-        if request.user.person is None or request.user.person.family_circles is None:
+        if (
+            request.user.person is None
+            or request.user.person not in circle.members.all()
+        ):
             return redirect('home')
 
     def _handle_submission(self, request, form_data, raw_form, circle_id):

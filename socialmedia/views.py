@@ -23,7 +23,8 @@ class ChatsEndpoint(BaseEndpoint):
     
     def get(self, request):
         """Get all chats for this user"""
-
+        if not request.user.is_authenticated:
+            return self.no_perms()
         chats = (
             Chat.objects
                 .filter(members=request.user)
@@ -72,6 +73,8 @@ class ChatsEndpoint(BaseEndpoint):
         }
         ```
         """
+        if not request.user.is_authenticated:
+            return self.no_perms()
         json = hydrate_json(request.body)
 
         chat = Chat.objects.create()
@@ -102,6 +105,8 @@ class ChatDetailEndpoint(BaseEndpoint):
 
     def get(self, request, chat_id):
         """Get all messages in this chat"""
+        if not request.user.is_authenticated:
+            return self.no_perms()
         try:
             chat = Chat.objects.get(id=chat_id)        
             if request.user not in chat.members.all():
@@ -122,6 +127,8 @@ class ChatDetailEndpoint(BaseEndpoint):
         }
         ```
         """
+        if not request.user.is_authenticated:
+            return self.no_perms()
         json = hydrate_json(request.body)
         try:
             chat = Chat.objects.get(id=chat_id)
@@ -149,6 +156,8 @@ class ChatDetailEndpoint(BaseEndpoint):
 class NotifsEndpoint(BaseEndpoint):
     
     def get(self, request):
+        if not request.user.is_authenticated:
+            return self.no_perms()
         """Get all of the current user's notifications"""
         messages = MessageNotification.objects.filter(target_user=request.user)
         comments = CommentNotification.objects.filter(target_user=request.user)
@@ -162,6 +171,8 @@ class NotifsEndpoint(BaseEndpoint):
         })
     
     def delete(self, request):
+        if not request.user.is_authenticated:
+            return self.no_perms()
         """Clear all of the current user's notifications"""
         MessageNotification.objects.filter(target_user=request.user).delete()
         CommentNotification.objects.filter(target_user=request.user).delete()
@@ -170,6 +181,8 @@ class NotifsEndpoint(BaseEndpoint):
 class NotifsDetailEndpoint(BaseEndpoint):
     
     def delete(self, request, notif_slug):
+        if not request.user.is_authenticated:
+            return self.no_perms()
         try:
             match = re_search(r'^([a-z]+)\-([0-9]+)$', notif_slug)
             if match is None:

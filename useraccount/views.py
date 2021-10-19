@@ -8,6 +8,8 @@ class UserSearchEndpoint(BaseEndpoint):
 
     def get(self, request):
         """Search for users by name or email"""
+        if not request.user.is_authenticated:
+            return self.no_perms()
         search = request.GET.get('q', None)
         if search is None:
             return self.not_ok()

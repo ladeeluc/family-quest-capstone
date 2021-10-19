@@ -2,6 +2,7 @@ from django.http.response import (
     HttpResponse,
     HttpResponseBadRequest,
     HttpResponseForbidden,
+    HttpResponseNotAllowed,
     HttpResponseNotFound,
     JsonResponse,
 )
@@ -46,6 +47,9 @@ class BaseEndpoint(View):
     
     def no_perms(self):
         return HttpResponseForbidden()
+    
+    def no_auth(self):
+        return HttpResponseNotAllowed()
     
 class GenericFormView(View):
     """
