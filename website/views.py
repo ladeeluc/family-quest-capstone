@@ -17,21 +17,21 @@ from django.views.generic import View
 
 from website.base_views import GenericFormView, PrefilledFormView
 
-from socialmedia.models import Chat
+from socialmedia.models import Chat, Post, Comment, CommentNotification
 
 from functools import reduce
 
 from familystructure.mixins import PersonRequiredMixin
-from socialmedia.forms import TextPostForm, ImagePostForm
-from socialmedia.models import Post
+from socialmedia.forms import TextPostForm, ImagePostForm, AddCommentForm
 from familystructure.models import FamilyCircle
 
 from familystructure.forms import CreateFamilyCircleForm
 
-class Home(LoginRequiredMixin, View):
+class Home(PersonRequiredMixin, View):
 
     def get(self, request):
-        return render(request, 'index.html')
+        return redirect('person_detail', request.user.person.id)
+        # return render(request, 'index.html')
 
 class Logout(View):
 
@@ -383,12 +383,40 @@ class CreatePost(PersonRequiredMixin, View):
 class PostDetail(PersonRequiredMixin, View):
 
     def get(self, request, post_id):
-        post = Post.objects.get(id=post_id)
-        if request.user.person not in post.family_circle.members.all():
+        try:
+            template_name = "post_detail.html"
+            #Get post from post id
+            post = Post.objects.get(id=post_id)
+           #Get comments from post
+            context = {
+                'post': post,
+                'comments': post.comments.all(),
+                'form': AddCommentForm()
+            }
+            return render(request, template_name, context)
+        except Post.DoesNotExist:
             return redirect('home')
-        return render(request, 'post_detail.html', {
-            "post":post
-        })
+
+    def post(self, request, post_id):
+        try:
+            template_name = "post_detail.html"
+            #Get post from post id
+            post = Post.objects.get(id=post_id)
+            form = AddCommentForm(request.POST)
+            if form.is_valid():
+                comment = Comment.objects.create(
+                    **form.cleaned_data,
+                    author=request.user,
+                    commented_on=post,
+                )
+                CommentNotification.objects.create(
+                    target_user=post.author,
+                    target_comment=comment
+                )
+
+            return redirect('post_detail', post_id)
+        except Post.DoesNotExist:
+            return redirect('home')
 
 class FamilyNavigator(PersonRequiredMixin, View):
     

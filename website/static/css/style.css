@@ -10,7 +10,13 @@
     width: 12em;
     height: 12em;
 }
-.portrait img {
+.portrait-sm {
+    width: 1.5em;
+    height: 1.5em;
+    display: inline-flex;
+    transform: translateY(0.3em)
+}
+.portrait > img {
     height: 100%;
 }
 /* custom sized spinners */

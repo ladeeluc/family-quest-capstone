@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block body %}
+{% load django_bootstrap5 %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/post_detail.css' %}">
+<div class="container-fluid px-lg-5">
+    <h1 class="mt-3">{{post.title}}</h1>
+    <span class="text-muted fs-4">
+        Posted by 
+        <a class="text-decoration-hover-only" href="{% url 'person_detail' post.author.person.id %}">
+            <div class="portrait portrait-sm ms-1">
+                {% include 'generic_image.html' with photo=post.author.person.profile_photo %}
+            </div>
+            {{post.author.person}}
+        </a>
+    </span>
+    {% if post.content %}
+    <p class="text-post-content ms-1 ps-4 mt-4">
+        {{post.content}}
+    </p>
+    {% endif %}
+    {% if post.post_photo %}
+    <p class="image-post-content mt-4 me-lg-5">
+        <img src="/static/uploads/{{post.post_photo}}">
+    </p>
+    {% endif %}
+    <hr>
+    <form action="" method="post" enctype="multipart/form-data" class="mt-4">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="submit" class="btn btn-primary mt-2">Add Comment</button>
+    </form>
+    <hr>
+    <h2 class="display-5 mt-4 mb-4">Comments</h2>
+    <div class="list-group mb-5">
+        {% if comments.count == 0 %}
+        <div class="lead ms-2">No comments yet, be the first to make one!</div>
+        {% endif %}
+        {% for comment in comments reversed %}
+        <div class="list-group-item list-group-item-action py-3">
+            <div class="d-flex w-100">
+                <a class="portrait me-3" href="{% url 'person_detail' comment.author.id %}">
+                    {% include 'generic_image.html' with photo=comment.author.person.profile_photo %}
+                </a>
+                <div class="mb-1 flex-grow-1 text-ellipsis">
+                    <div class="d-flex">
+                        <a class="text-primary me-auto fs-5 text-ellipsis text-decoration-hover-only" href="/person/12/">Terry "Timmy" Jackson Buck</a>
+                        <small class="text-nowrap ms-2 tz-localize">{{comment.created_at.isoformat}}</small>
+                    </div>
+                    <div class="fs-5">{{comment.body}}</div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
