@@ -8,7 +8,7 @@ class ChatsWidget {
         this.getChats = this.getChats.bind(this);
         
         this.getChats();
-        setInterval(this.getChats, 10000);
+        setInterval(this.getChats, 6000);
     }
     async getChats() {
         this.setLoading(true);
