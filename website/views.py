@@ -140,7 +140,8 @@ class PersonEdit(PersonRequiredMixin, PrefilledFormView):
         
     def _handle_submission(self, request, form_data, raw_form, person_id):
         person = Person.objects.get(id=person_id)
-        person.profile_photo = form_data['profile_photo']
+        if form_data['profile_photo']:
+            person.profile_photo = form_data['profile_photo']
         person.first_name = form_data['first_name']
         person.nickname = form_data['nickname']
         person.middle_name = form_data['middle_name']
