@@ -45,7 +45,7 @@
                 </a>
                 <div class="mb-1 flex-grow-1 text-ellipsis">
                     <div class="d-flex">
-                        <a class="text-primary me-auto fs-5 text-ellipsis text-decoration-hover-only" href="/person/12/">Terry "Timmy" Jackson Buck</a>
+                        <a class="text-primary me-auto fs-5 text-ellipsis text-decoration-hover-only" href="{% url 'person_detail' comment.author.id %}">{{comment.author}}</a>
                         <small class="text-nowrap ms-2 tz-localize">{{comment.created_at.isoformat}}</small>
                     </div>
                     <div class="fs-5">{{comment.body}}</div>
