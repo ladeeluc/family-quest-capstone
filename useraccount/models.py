@@ -17,7 +17,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     | :------- | :--------- |
     | email    | unique     |
     | password | 128 chars  |
-    | person   | oto Person | # TODO: ADD THIS
+    | person   | oto Person |
     """
 
     username_validator = EmailValidator()

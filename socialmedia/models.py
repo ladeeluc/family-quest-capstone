@@ -136,7 +136,7 @@ class CommentNotification(BaseNotification):
             'type': 'comment',
             'from': str(self.target_comment.author),
             'created_at': self.created_at,
-            'url': f"reverse('comment detail view name or post detail view name with hash, fixme when one exists', {self.target_comment.id})",
+            'url': reverse('post_detail', args=[self.target_comment.commented_on.id]),
         }
     
     def __str__(self):
@@ -148,7 +148,7 @@ class CommentNotification(BaseNotification):
             'type': 'comment',
             'from': str(self.target_comment.author),
             'created_at': self.created_at,
-            'url': f"reverse('comment detail view name or post detail view name with hash, fixme when one exists', {self.target_comment.id})",
+            'url': reverse('post_detail', args=[self.target_comment.commented_on.id]),
         }
 
 class MessageNotification(BaseNotification):
