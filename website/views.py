@@ -156,6 +156,7 @@ class PersonEdit(PersonRequiredMixin, PrefilledFormView):
 
 class PersonAddSpouse(PersonEdit):
     FormClass = ChooseRelatedPersonForm
+    template_name = 'choose_person_form.html'
     template_text = {"header":"Add Spouse", "submit":"Add"}
 
     def _get_prefilled_form(self, request, person_id):
@@ -185,6 +186,7 @@ class PersonAddSpouse(PersonEdit):
 
 class PersonAddParent(PersonEdit):
     FormClass = ChooseRelatedPersonForm
+    template_name = 'choose_person_form.html'
     template_text = {"header":"Add Parent", "submit":"Add"}
 
     def _get_prefilled_form(self, request, person_id):
@@ -404,8 +406,7 @@ class PostDetail(PersonRequiredMixin, View):
 
     def post(self, request, post_id):
         try:
-            template_name = "post_detail.html"
-            #Get post from post id
+            # Get post from post id
             post = Post.objects.get(id=post_id)
             form = AddCommentForm(request.POST)
             if form.is_valid():
@@ -414,11 +415,11 @@ class PostDetail(PersonRequiredMixin, View):
                     author=request.user,
                     commented_on=post,
                 )
-                CommentNotification.objects.create(
-                    target_user=post.author,
-                    target_comment=comment
-                )
-
+                if request.user != post.author:
+                    CommentNotification.objects.create(
+                        target_user=post.author,
+                        target_comment=comment
+                    )
             return redirect('post_detail', post_id)
         except Post.DoesNotExist:
             return redirect('home')
