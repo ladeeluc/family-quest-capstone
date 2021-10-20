@@ -28,6 +28,14 @@ class AddPersonForm(forms.ModelForm):
         ]
     birth_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}))
 
+    def clean(self):
+        cleaned_data = super().clean()
+        birth_date = cleaned_data.get("birth_date")
+        death_date = cleaned_data.get("death_date", None)
+        if death_date and death_date < birth_date:
+            self.add_error('death_date', 'Death date should be later than birth date')
+
+
 class EditPersonForm(forms.ModelForm):
     class Meta:
         model = Person
@@ -46,6 +54,13 @@ class EditPersonForm(forms.ModelForm):
     
     birth_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}))
     death_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}), required=False)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        birth_date = cleaned_data.get("birth_date")
+        death_date = cleaned_data.get("death_date", None)
+        if death_date and death_date < birth_date:
+            self.add_error('death_date', 'Death date should be later than birth date')
 
 class ChooseRelatedPersonForm(forms.Form):
     person = forms.ModelChoiceField(Person.objects.all())
